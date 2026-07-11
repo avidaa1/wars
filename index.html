@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AVIDAA WARS — The Archive of Conflict</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; connect-src https://api.anthropic.com;">
+<meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230a0e0a'/><path d='M20 50 L80 50 M50 20 L50 80' stroke='%23c9a24b' stroke-width='4'/><circle cx='50' cy='50' r='30' fill='none' stroke='%23c9a24b' stroke-width='3'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G8M1YZQ8WF"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-G8M1YZQ8WF');</script>
+<style>
+:root{
+  --bg:#0a0e0a; --bg2:#0f140f; --panel:#121a12; --line:#c9a24b; --lineDim:#5a4a2a;
+  --grid:rgba(201,162,75,.06); --text:#d8ddd0; --muted:#7a8570; --red:#a83232;
+  --off:#4a7a4a; --disp:#c9a24b; --est:#8a8a8a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Oswald',sans-serif;overflow-x:hidden;
+  background-image:
+    linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:28px 28px;}
+#signal-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;opacity:.5;pointer-events:none}
+::selection{background:var(--line);color:#000}
+a{color:inherit}
+.mono{font-family:'JetBrains Mono',monospace}
+
+header{position:sticky;top:0;z-index:200;background:rgba(10,14,10,.95);backdrop-filter:blur(6px);
+  border-bottom:2px solid var(--line);padding:10px clamp(12px,3vw,24px)}
+.toprow{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.wordmark{font-weight:700;letter-spacing:3px;font-size:clamp(1.1rem,3vw,1.5rem);text-transform:uppercase}
+.wordmark span{color:var(--line)}
+#back-home{font-weight:700;text-decoration:none;-webkit-appearance:none;appearance:none;white-space:nowrap;
+  background:linear-gradient(90deg,#ff0080,#ff8c00,#ffe000,#00ff80,#00bfff,#a855f7,#ff0080);
+  background-size:300% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  animation:rainbow 3s linear infinite;font-size:.85rem;letter-spacing:2px}
+@keyframes rainbow{to{background-position:300% center}}
+@media (prefers-reduced-motion:reduce){#back-home{animation:none}}
+
+.navrow{display:flex;flex-wrap:wrap;gap:8px;height:auto;align-items:center;margin-top:10px}
+.tab{-webkit-appearance:none;appearance:none;white-space:nowrap;background:transparent;color:var(--muted);
+  border:1px solid var(--lineDim);font-size:clamp(.64rem,1.6vw,.74rem);padding:7px clamp(9px,2.2vw,14px);
+  text-transform:uppercase;letter-spacing:1.5px;font-family:'JetBrains Mono',monospace;cursor:pointer;border-radius:2px}
+.tab.active,.tab:hover{border-color:var(--line);color:var(--line)}
+
+.hero{padding:clamp(24px,6vw,50px) clamp(14px,4vw,30px) 10px;max-width:1100px;margin:0 auto;text-align:center}
+.hero h1{font-size:clamp(1.6rem,5vw,3rem);text-transform:uppercase;letter-spacing:4px;line-height:1.15}
+.hero h1 span{color:var(--line)}
+.hero p{color:var(--muted);margin-top:12px;font-size:clamp(.8rem,2vw,.95rem);max-width:640px;margin-left:auto;margin-right:auto;line-height:1.6}
+.hero .stamp{display:inline-block;margin-top:16px;border:1px solid var(--red);color:var(--red);padding:4px 12px;
+  font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:2px;text-transform:uppercase;transform:rotate(-2deg)}
+
+.searchwrap{position:sticky;top:98px;z-index:150;background:rgba(10,14,10,.97);border-bottom:1px solid var(--lineDim);
+  padding:10px clamp(12px,3vw,24px);display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+#search{flex:1 1 220px;-webkit-appearance:none;appearance:none;background:var(--panel);border:1px solid var(--lineDim);
+  color:var(--text);padding:9px 12px;font-family:'JetBrains Mono',monospace;font-size:.8rem;border-radius:2px}
+#search:focus{outline:none;border-color:var(--line)}
+.chip{-webkit-appearance:none;appearance:none;background:var(--panel);border:1px solid var(--lineDim);color:var(--muted);
+  font-family:'JetBrains Mono',monospace;font-size:.68rem;padding:7px 10px;border-radius:2px;cursor:pointer;letter-spacing:1px}
+.chip.active{border-color:var(--line);color:var(--line)}
+#resultCount{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--muted);white-space:nowrap}
+
+main{max-width:900px;margin:0 auto;padding:26px clamp(10px,3vw,20px) 80px;position:relative}
+.era{margin:34px 0 14px;display:flex;align-items:center;gap:12px}
+.era::before,.era::after{content:'';flex:1;height:1px;background:var(--lineDim)}
+.era h2{font-family:'JetBrains Mono',monospace;font-size:.78rem;letter-spacing:3px;color:var(--line);text-transform:uppercase;white-space:nowrap}
+
+.timeline{position:relative;padding-left:20px;border-left:2px dashed var(--lineDim)}
+.card{position:relative;background:var(--panel);border:1px solid var(--lineDim);border-radius:2px;margin-bottom:12px;
+  cursor:pointer;transition:border-color .15s}
+.card::before{content:'';position:absolute;left:-27px;top:18px;width:12px;height:12px;border-radius:50%;
+  background:var(--bg);border:2px solid var(--line)}
+.card:hover{border-color:var(--line)}
+.card .head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 16px;flex-wrap:wrap}
+.card .name{font-weight:600;font-size:clamp(.9rem,2.4vw,1.05rem);text-transform:uppercase;letter-spacing:.5px}
+.card .years{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted)}
+.card .badge{font-family:'JetBrains Mono',monospace;font-size:.68rem;padding:3px 8px;border-radius:2px;white-space:nowrap}
+.badge.off{border:1px solid var(--off);color:var(--off)}
+.badge.disp{border:1px solid var(--disp);color:var(--disp)}
+.badge.est{border:1px solid var(--est);color:var(--est)}
+.scale{height:4px;background:#1a221a;margin:0 16px;border-radius:2px;overflow:hidden}
+.scale i{display:block;height:100%;background:linear-gradient(90deg,var(--line),var(--red))}
+.body{max-height:0;overflow:hidden;transition:max-height .25s ease;padding:0 16px}
+.card.open .body{max-height:1600px;padding:4px 16px 16px}
+.row{display:grid;grid-template-columns:120px 1fr;gap:8px;font-size:.82rem;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.row b{color:var(--line);font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:1px;text-transform:uppercase}
+.sources{margin-top:10px;font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.6}
+.flagnote{margin-top:8px;font-size:.72rem;color:var(--red);border-left:2px solid var(--red);padding-left:8px}
+.subtl-head{margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:2px;color:var(--line);text-transform:uppercase}
+.subtl{margin-top:8px;padding-left:14px;border-left:1px dashed var(--lineDim)}
+.subitem{position:relative;padding:2px 0 10px 14px}
+.subitem::before{content:'';position:absolute;left:-19px;top:6px;width:7px;height:7px;border-radius:50%;background:var(--line)}
+.subitem .sdate{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--line);display:block;margin-bottom:2px}
+.subitem .stext{font-size:.78rem;color:var(--text);line-height:1.5}
+
+footer{text-align:center;padding:30px;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:1px}
+
+/* ===== CANONICAL AVIDAA CHATBOT MODULE — war-room themed ===== */
+#chatbot{--cb-cyan:#c9a24b;--cb-purple:#a83232;--cb-green:#4a7a4a;--cb-fb:'Oswald',sans-serif;--cb-fd:'JetBrains Mono',monospace;}
+#chatbot{position:fixed;bottom:48px;right:18px;z-index:9000;width:min(360px,calc(100vw - 24px));font-family:var(--cb-fb);}
+#chat-toggle{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--cb-purple),var(--cb-cyan));border:2px solid rgba(255,255,255,.1);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 24px rgba(168,85,247,.3),0 0 48px rgba(0,229,255,.1);margin-left:auto;-webkit-appearance:none;appearance:none;transition:transform .2s;animation:cb-chatpulse 3s ease-in-out infinite;color:#000}
+#chat-toggle:hover{transform:scale(1.08)}
+@keyframes cb-chatpulse{0%,100%{box-shadow:0 0 24px rgba(168,50,50,.35),0 0 48px rgba(201,162,75,.15)}50%{box-shadow:0 0 34px rgba(168,50,50,.55),0 0 64px rgba(201,162,75,.3)}}
+@keyframes cb-rainbow{to{background-position:200% center}}
+@keyframes cb-livepulse{0%,100%{opacity:1}50%{opacity:.35}}
+#chat-box{background:rgba(10,14,10,.97);border:1px solid var(--line);backdrop-filter:blur(14px);display:none;flex-direction:column;margin-bottom:10px;overflow:hidden;border-radius:4px;box-shadow:0 0 40px rgba(0,0,0,.8)}
+#chat-box.open{display:flex}
+#quest-bar{height:3px;background:rgba(201,162,75,.08);position:relative;overflow:hidden;transition:opacity .3s;opacity:0}
+#quest-bar.active{opacity:1}
+#quest-fill{height:100%;width:0%;transition:width .8s ease,background .8s ease;background:var(--cb-cyan)}
+#quest-label{font-family:var(--cb-fd);font-size:7px;letter-spacing:3px;color:rgba(201,162,75,.35);padding:4px 16px 0;display:none}
+#quest-label.active{display:block}
+#chat-head{padding:12px 16px;border-bottom:1px solid rgba(201,162,75,.15);display:flex;justify-content:space-between;align-items:center;background:rgba(201,162,75,.04)}
+.ch-title{font-family:var(--cb-fd);font-size:9px;letter-spacing:4px;color:var(--cb-cyan)}
+.ch-status{font-size:8px;letter-spacing:2px;color:var(--cb-green);display:flex;align-items:center;gap:5px}
+.ch-dot{width:5px;height:5px;border-radius:50%;background:var(--cb-green);animation:cb-livepulse 1.5s ease-in-out infinite}
+.ch-close{color:rgba(255,255,255,.3);cursor:pointer;font-size:16px;line-height:1;padding:0 2px}
+#chat-msgs{height:240px;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin}
+.cmsg{font-size:12.5px;letter-spacing:.3px;line-height:1.55;padding:9px 13px;max-width:88%;white-space:pre-wrap}
+.cmsg.ai{background:rgba(201,162,75,.06);border-left:2px solid var(--cb-cyan);color:var(--text);align-self:flex-start;border-radius:0 4px 4px 0}
+.cmsg.ai::before{content:'AVIDAA WARS';font-family:var(--cb-fd);font-size:6px;letter-spacing:2px;color:rgba(201,162,75,.5);display:block;margin-bottom:4px}
+.cmsg.user{background:rgba(168,50,50,.1);border-right:2px solid var(--cb-purple);color:var(--text);align-self:flex-end;text-align:right;border-radius:4px 0 0 4px}
+.typing-indicator{display:flex;gap:4px;padding:10px 14px;align-self:flex-start}
+.typing-indicator span{width:5px;height:5px;background:var(--cb-cyan);border-radius:50%;opacity:.4;animation:cb-typedot .8s ease-in-out infinite}
+.typing-indicator span:nth-child(2){animation-delay:.15s}
+.typing-indicator span:nth-child(3){animation-delay:.3s}
+@keyframes cb-typedot{0%,100%{opacity:.2;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}
+#chat-suggestions{display:flex;flex-wrap:wrap;gap:5px;padding:8px 14px;border-top:1px solid rgba(201,162,75,.08)}
+.chat-sugg{font-size:10px;letter-spacing:.5px;padding:3px 10px;border:1px solid rgba(201,162,75,.2);color:rgba(201,162,75,.7);cursor:pointer;background:rgba(201,162,75,.04);transition:all .2s}
+.chat-sugg:hover{border-color:var(--cb-cyan);color:var(--cb-cyan)}
+#chat-input-row{display:flex;border-top:1px solid rgba(201,162,75,.1)}
+#chat-input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:var(--cb-fb);font-size:13px;padding:11px 14px;-webkit-appearance:none;appearance:none}
+#chat-input::placeholder{color:rgba(216,221,208,.25)}
+#chat-send{background:transparent;border:none;border-left:1px solid rgba(201,162,75,.1);color:var(--cb-cyan);padding:0 16px;cursor:pointer;font-size:15px;-webkit-appearance:none;appearance:none}
+#rabbit-avatar{display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 0 6px rgba(201,162,75,.4))}
+#pulse-ring{position:absolute;bottom:-6px;right:-6px;width:58px;height:58px;border-radius:50%;pointer-events:none;z-index:-1}
+@media (max-width:600px){#chatbot{bottom:14px;right:10px}#chat-msgs{height:50vh}}
+@media (prefers-reduced-motion:reduce){#chat-toggle{animation:none}.ch-dot{animation:none}}
+
+@media (max-width:600px){
+  .searchwrap{top:92px}
+  .row{grid-template-columns:90px 1fr}
+}
+</style>
+
+</head>
+<body>
+<canvas id="signal-canvas" aria-hidden="true"></canvas>
+
+
+<header>
+  <div class="toprow">
+    <div class="wordmark">AVIDAA <span>WARS</span></div>
+    <a id="back-home" href="https://avidaa1.github.io">AVIDAA</a>
+  </div>
+  <div class="navrow">
+    <button class="tab active" data-era="all">All Eras</button>
+    <button class="tab" data-era="ancient">Ancient</button>
+    <button class="tab" data-era="medieval">Medieval</button>
+    <button class="tab" data-era="early">Early Modern</button>
+    <button class="tab" data-era="industrial">Industrial</button>
+    <button class="tab" data-era="20c">20th Century</button>
+    <button class="tab" data-era="21c">21st Century</button>
+  </div>
+</header>
+
+<div class="hero">
+  <h1>THE ARCHIVE OF <span>CONFLICT</span></h1>
+  <p>A sourced, standing record of war across recorded history — built so figures cannot be quietly revised, disputed, or forgotten. Official counts, disputed counts, and estimates are shown separately, never merged into one convenient number.</p>
+  <div class="stamp mono">PRESERVATION LAYER — v1 · 2026</div>
+</div>
+
+<div class="searchwrap">
+  <input id="search" class="mono" type="text" placeholder="Search by name, country, government, year...">
+  <select id="centuryFilter" class="chip mono" style="background:var(--panel);color:var(--muted)">
+    <option value="all">All Centuries</option>
+  </select>
+  <select id="tollFilter" class="chip mono" style="background:var(--panel);color:var(--muted)">
+    <option value="all">Any Toll</option>
+    <option value="1000">1,000+</option>
+    <option value="100000">100,000+</option>
+    <option value="1000000">1,000,000+</option>
+    <option value="10000000">10,000,000+</option>
+  </select>
+  <button class="chip active" data-sort="year">Newest First</button>
+  <button class="chip" data-sort="deaths">Deaths ↓</button>
+  <span id="resultCount" class="mono"></span>
+</div>
+
+<main>
+  <div id="eras"></div>
+</main>
+
+<footer>AVIDAA * IO — WARS ARCHIVE — a signal beneath the noise of history. Est. 2025, built for humans and AI, knowledge made clear. Phase 1: 68 conflicts documented, expanding toward full historical coverage.</footer>
+
+<div id="chatbot">
+  <div id="chat-box">
+    <div id="chat-head">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div id="rabbit-avatar">
+          <svg id="rabbit-svg" width="34" height="34" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
+            <ellipse id="ear-l" cx="13" cy="10" rx="3.5" ry="7" fill="#0a0e0a" stroke="#c9a24b" stroke-width="1"/>
+            <ellipse id="ear-r" cx="25" cy="10" rx="3.5" ry="7" fill="#0a0e0a" stroke="#c9a24b" stroke-width="1"/>
+            <ellipse id="rabbit-head" cx="19" cy="22" rx="10" ry="9" fill="#0a0e0a" stroke="#c9a24b" stroke-width="1"/>
+            <circle id="eye-l" cx="15" cy="21" r="2" fill="#c9a24b" opacity="0.9"/>
+            <circle id="eye-r" cx="23" cy="21" r="2" fill="#c9a24b" opacity="0.9"/>
+            <ellipse id="nose" cx="19" cy="25" rx="1.2" ry="0.8" fill="#a83232" opacity="0.8"/>
+            <circle id="glow-ring" cx="19" cy="22" r="12" fill="none" stroke="#c9a24b" stroke-width="0.4" opacity="0.2"/>
+          </svg>
+        </div>
+        <div class="ch-title">AVIDAA WARS</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="ch-status"><div class="ch-dot"></div>ONLINE</div>
+        <div class="ch-close" onclick="toggleChat()">&#x2715;</div>
+      </div>
+    </div>
+    <div id="quest-bar"><div id="quest-fill"></div></div>
+    <div id="quest-label"></div>
+    <div id="chat-msgs"></div>
+    <div id="chat-suggestions">
+      <div class="chat-sugg" onclick="quickAsk('deadliest war')">Deadliest war</div>
+      <div class="chat-sugg" onclick="quickAsk('what is avidaa')">What is AVIDAA?</div>
+      <div class="chat-sugg" onclick="quickAsk('rabbit')">?</div>
+    </div>
+    <div id="chat-input-row">
+      <input id="chat-input" placeholder="Ask about a war, or AVIDAA..." maxlength="200">
+      <button id="chat-send" onclick="chatSend()">&#x27A4;</button>
+    </div>
+  </div>
+  <button id="chat-toggle" onclick="toggleChat()" style="position:relative;">
+    <canvas id="pulse-ring" width="58" height="58"></canvas>
+    &#x2694;
+  </button>
+</div>
+
+
+<script>
+/* ===== WARS DATASET — PHASE 1 ===== */
+/* toll field: {off:number|null, disp:number|null, est:[low,high]|null} — never a single unqualified figure */
+const WARS=[
+{name:"2026 Iran War (US–Israel–Iran)",start:2026,end:null,era:"21c",countries:["Iran","United States","Israel","Lebanon"],govs:["Islamic Republic of Iran","United States","Israel"],
+ toll:{off:3468,disp:6000,est:[7144,9676]},injuries:"Approx. 46,965+ injured across all fronts as of 9 Jul 2026 (Day 133); US: 15 KIA; Lebanon tracked as a distinct but entangled front (Lebanese Health Ministry: 3,433–4,175 killed)",
+ cause:"Renewed escalation over Iran's nuclear program eight months after the 2025 Twelve-Day War; opened 28 Feb 2026 with US-Israeli 'Operation Epic Fury,' a decapitation strike killing Supreme Leader Ali Khamenei and senior officials.",
+ outcome:"No formal end. A two-week ceasefire (8 Apr) was extended indefinitely, then formalized in a 14-point 'Islamabad Memorandum' (signed 17 Jun) opening a 60-day negotiation window. Repeated violations culminated in Trump declaring the ceasefire 'over' on 8-10 Jul 2026, even as both sides say talks continue.",
+ flag:"OFFICIAL figure (3,468) is Iran's Ministry of Health count as of Jun 2026; DISPUTED figure (6,000+) is the US/Israeli intelligence estimate; ESTIMATED range (7,144-9,676) is a cross-source compiled tally (CENTCOM, IDF, Lebanese Health Ministry, Iran's Foundation of Martyrs, HRANA, OSINT) as of 9 Jul 2026. These numbers will keep moving — treat none of them as final.",
+ sources:["Wikipedia: Casualties of the 2026 Iran war","IranWarLive","Al Jazeera casualty tracker","NPR","Britannica","CNN","Reuters"],
+ events:[
+   {date:"25 Feb 2026",text:"US Treasury sanctions 30+ entities tied to Iran's oil shipping network."},
+   {date:"28 Feb 2026",text:"US-Israeli 'Operation Epic Fury' begins; Khamenei and senior officials killed. HRANA later documents 3,636 Iranian deaths by 7 April, including 1,701 civilians and 254 children."},
+   {date:"1 Mar 2026",text:"Hezbollah enters the conflict two days later with rocket attacks on northern Israel, opening a parallel Lebanon front."},
+   {date:"3 Mar 2026",text:"Israeli strikes destroy the building where Iran's Assembly of Experts was to meet, delaying succession."},
+   {date:"9 Mar 2026",text:"Israeli strike on a school in Minab kills over 180 students and teachers, prompting international investigation calls."},
+   {date:"12-13 Mar 2026",text:"US KC-135 tanker crash in western Iraq kills 6 US service members (non-hostile); US combat KIA reaches 13 by 23 March."},
+   {date:"6 Mar 2026",text:"Trump: 'There will be no deal with Iran except UNCONDITIONAL SURRENDER.'"},
+   {date:"25 Mar 2026",text:"US sends a 15-point ceasefire proposal via Pakistan; Iran rejects it and issues its own 10-point counterproposal."},
+   {date:"2 Apr 2026",text:"US 'double-tap' strike on the B1 bridge in Karaj kills 8 civilians celebrating a holiday; widely cited as a war-crimes concern."},
+   {date:"8 Apr 2026",text:"Two-week ceasefire agreed, mediated by Pakistan."},
+   {date:"13 Apr 2026",text:"Islamabad talks collapse over Hormuz and the nuclear program; Trump imposes a naval blockade on Iranian ports."},
+   {date:"21 Apr 2026",text:"Ceasefire extended indefinitely."},
+   {date:"12 Jun 2026",text:"Final text of a 14-point Memorandum of Understanding agreed after months of stalled talks."},
+   {date:"17 Jun 2026",text:"Trump and Iranian President Pezeshkian sign the 'Islamabad Memorandum' (Trump in Versailles, France); 60-day negotiation window begins covering Hormuz, the nuclear program, and sanctions."},
+   {date:"19-20 Jun 2026",text:"Renewed Israel-Hezbollah ceasefire announced, then Iran claims to re-close Hormuz over continued Israeli strikes in Lebanon; US denies any closure."},
+   {date:"28 Jun 2026",text:"First death of the post-MOU strike cycle: a Qatari civilian killed by shrapnel."},
+   {date:"1 Jul 2026",text:"US-Iran strike cycle continues; Iran strikes 3 more commercial vessels in Hormuz."},
+   {date:"7 Jul 2026",text:"US strikes 80+ Iran targets and reimposes oil sanctions, reversing a core MOU term, in response to the tanker strikes."},
+   {date:"3-9 Jul 2026",text:"Six-day state funeral for Khamenei held across Tehran, Qom, Najaf, Karbala, and Mashhad, with open calls for revenge against Trump."},
+   {date:"8-9 Jul 2026",text:"US hits 90+ targets over two nights, including a railway bridge and an airport; Trump declares the ceasefire 'over' at the NATO summit in Ankara, calling Iranian leadership 'scum.'"},
+   {date:"10 Jul 2026",text:"Trump agrees to continue talks 'in no uncertain terms' while maintaining the ceasefire is over; threatens '1000 Missiles locked and loaded' if Iran attempts to assassinate him."}
+ ]},
+{name:"Twelve-Day War (Israel–Iran)",start:2025,end:2025,era:"21c",countries:["Iran","Israel","United States"],govs:["Islamic Republic of Iran","Israel","United States"],
+ toll:{off:null,disp:null,est:[657,1100]},injuries:"At least 2,037 wounded per HRANA; Iranian health ministry cited over 2,500",
+ cause:"Israeli surprise strikes on Iranian nuclear and military facilities amid an IAEA non-compliance finding; assassinations of nuclear scientists and commanders.",
+ outcome:"US bombed three Iranian nuclear sites; Iran retaliated against a US base in Qatar; ceasefire reached 24 June 2025. Precursor to the full-scale 2026 Iran War.",
+ flag:"Casualty figures come from a mix of Iranian officials, human rights monitors (HRANA), and Israeli/US military statements — no single agreed count exists.",
+ sources:["Wikipedia","NBC News","HRANA"],
+ events:[
+   {date:"13 Jun 2025",text:"Israel opens the war with a surprise attack on Iranian nuclear and military sites."},
+   {date:"13-20 Jun 2025",text:"Iran retaliates with 550+ ballistic missiles and 1,000+ suicide drones at Israeli population centers, a hospital, and military/energy sites."},
+   {date:"22 Jun 2025",text:"US bombs three Iranian nuclear facilities directly."},
+   {date:"22-23 Jun 2025",text:"Iran retaliates by firing missiles at a US base in Qatar."},
+   {date:"24 Jun 2025",text:"Israel and Iran agree to a US-brokered ceasefire; Trump later dubs it the '12 Day War.'"}
+ ]},
+{name:"Russo-Ukrainian War",start:2014,end:null,era:"21c",countries:["Ukraine","Russia"],govs:["Russian Federation","Ukraine"],
+ toll:{off:null,disp:null,est:[70000,500000]},injuries:"Estimates vary widely by source and are politically contested",
+ cause:"Russian annexation of Crimea (2014) followed by full-scale invasion (Feb 2022).",
+ outcome:"Ongoing as of 2026.",
+ flag:"Both governments release casualty figures serving their own narratives; independent verification is limited by battlefield access.",
+ sources:["UN OHCHR","BBC","AP"]},
+{name:"Syrian Civil War",start:2011,end:2024,era:"21c",countries:["Syria"],govs:["Ba'athist Syria","Syrian opposition factions","ISIS"],
+ toll:{off:null,disp:null,est:[500000,610000]},injuries:"Over 1 million estimated wounded",
+ cause:"Arab Spring protests met with government crackdown, escalating into multi-faction civil war.",
+ outcome:"Assad government fell December 2024; transitional government installed.",
+ flag:"UN suspended official death counts in 2014 citing unreliable data; later estimates come from monitoring groups, not verified state sources.",
+ sources:["UN","SOHR","Reuters"]},
+{name:"War in Afghanistan (2001-2021)",start:2001,end:2021,era:"21c",countries:["Afghanistan","United States"],govs:["Taliban","Islamic Republic of Afghanistan","United States/NATO"],
+ toll:{off:null,disp:null,est:[176000,212000]},injuries:"Hundreds of thousands, many uncounted civilian cases",
+ cause:"US-led invasion following the 11 September 2001 attacks; toppling of the Taliban government.",
+ outcome:"US withdrawal and Taliban retook control in August 2021.",
+ flag:"Civilian toll figures from Brown University's Costs of War project differ substantially from official US and Afghan government reporting.",
+ sources:["Costs of War (Brown University)","UN AMA"]},
+{name:"Iraq War",start:2003,end:2011,era:"21c",countries:["Iraq","United States"],govs:["Ba'athist Iraq","United States/Coalition","Iraqi transitional governments"],
+ toll:{off:null,disp:null,est:[151000,600000]},injuries:"Widely disputed, from hundreds of thousands to over 1 million by some studies",
+ cause:"US-led invasion citing WMD claims later found unsubstantiated.",
+ outcome:"Saddam Hussein government toppled; prolonged insurgency and sectarian conflict followed.",
+ flag:"Estimates range by a factor of 4-6x depending on methodology (Iraq Body Count vs Lancet studies) — one of the most contested casualty disputes in modern history.",
+ sources:["Iraq Body Count","The Lancet","Reuters"]},
+{name:"Rwandan Genocide",start:1994,end:1994,era:"20c",countries:["Rwanda"],govs:["Hutu-led Rwandan government"],
+ toll:{off:800000,disp:1074017,est:[500000,1000000]},injuries:"Hundreds of thousands, plus mass sexual violence documented",
+ cause:"Ethnic tension between Hutu and Tutsi populations, inflamed by decades of colonial-era divide-and-rule policy.",
+ outcome:"Genocide ended when the Rwandan Patriotic Front took control of the country.",
+ flag:"The 1,074,017 government-commissioned figure is higher than most independent demographic estimates; scholars continue to debate the true count.",
+ sources:["UN","Rwandan government census","Human Rights Watch"]},
+{name:"Gulf War",start:1990,end:1991,era:"20c",countries:["Iraq","Kuwait"],govs:["Ba'athist Iraq","US-led Coalition"],
+ toll:{off:null,disp:null,est:[25000,50000]},injuries:"Tens of thousands",
+ cause:"Iraqi invasion and annexation of Kuwait.",
+ outcome:"Coalition victory; Iraqi forces expelled from Kuwait.",
+ sources:["US DoD","UN"]},
+{name:"Vietnam War",start:1955,end:1975,era:"20c",countries:["Vietnam","United States","Laos","Cambodia"],govs:["North Vietnam","South Vietnam","United States"],
+ toll:{off:null,disp:null,est:[1500000,3800000]},injuries:"Millions, including long-term Agent Orange effects",
+ cause:"Cold War proxy conflict over Vietnamese reunification/communism.",
+ outcome:"North Vietnamese/Viet Cong victory; Vietnam reunified in 1976.",
+ flag:"US and Vietnamese government figures diverge sharply; the higher end includes contested civilian estimates.",
+ sources:["US National Archives","Vietnamese government","BBC"]},
+{name:"Korean War",start:1950,end:1953,era:"20c",countries:["North Korea","South Korea","China","United States"],govs:["DPRK","Republic of Korea","China","United States/UN"],
+ toll:{off:null,disp:null,est:[1200000,4500000]},injuries:"Millions, plus mass civilian displacement",
+ cause:"Division of Korea after WWII; North Korean invasion of the South.",
+ outcome:"Armistice signed 1953; Korea remains divided at the DMZ.",
+ sources:["US DoD","UN","National Archives of Korea"]},
+{name:"World War II",start:1939,end:1945,era:"20c",countries:["Global"],govs:["Allied Powers","Axis Powers"],
+ toll:{off:null,disp:null,est:[70000000,85000000]},injuries:"Estimates in the tens of millions; largest conflict in recorded history",
+ cause:"German expansionism, unresolved WWI grievances, and Axis aggression across Europe, Africa, and Asia-Pacific.",
+ outcome:"Allied victory; Axis powers defeated; United Nations founded.",
+ flag:"Soviet and Chinese civilian death tolls remain contested due to incomplete Soviet-era and wartime Chinese records.",
+ sources:["National WWII Museum","UN","multiple national archives"]},
+{name:"World War I",start:1914,end:1918,era:"20c",countries:["Global"],govs:["Allied Powers","Central Powers"],
+ toll:{off:null,disp:null,est:[15000000,22000000]},injuries:"Over 20 million wounded",
+ cause:"Assassination of Archduke Franz Ferdinand; entangled alliance system; imperial rivalry.",
+ outcome:"Allied victory; Treaty of Versailles; collapse of four empires.",
+ sources:["Imperial War Museum","National Archives (UK)"]},
+{name:"Russian Civil War",start:1917,end:1923,era:"20c",countries:["Russia"],govs:["Bolshevik Russia","White movement factions"],
+ toll:{off:null,disp:null,est:[7000000,12000000]},injuries:"Includes deaths from associated famine and disease",
+ cause:"Collapse of the Russian Empire after the 1917 Revolution.",
+ outcome:"Bolshevik victory; formation of the Soviet Union in 1922.",
+ sources:["Library of Congress","multiple historians"]},
+{name:"Second Congo War",start:1998,end:2003,era:"20c",countries:["Democratic Republic of Congo"],govs:["DRC government","multiple rebel/foreign-backed factions"],
+ toll:{off:null,disp:null,est:[2500000,5400000]},injuries:"Millions displaced; most deaths attributed to disease and starvation, not combat directly",
+ cause:"Regional power struggle involving up to nine African nations following the First Congo War.",
+ outcome:"Peace agreements signed 2002-2003, though instability continued for years.",
+ flag:"The often-cited 5.4 million figure (IRC survey) has been challenged on methodological grounds by other researchers.",
+ sources:["International Rescue Committee","UN"]},
+{name:"Iran-Iraq War",start:1980,end:1988,era:"20c",countries:["Iran","Iraq"],govs:["Islamic Republic of Iran","Ba'athist Iraq"],
+ toll:{off:null,disp:null,est:[500000,1000000]},injuries:"Hundreds of thousands, including chemical weapon casualties",
+ cause:"Border disputes and Iraqi invasion following the Iranian Revolution.",
+ outcome:"UN-brokered ceasefire in 1988; borders largely unchanged.",
+ sources:["UN","US Congressional Research Service"]},
+{name:"Chinese Civil War",start:1927,end:1949,era:"20c",countries:["China"],govs:["Republic of China (Kuomintang)","Chinese Communist Party"],
+ toll:{off:null,disp:null,est:[1500000,7000000]},injuries:"Millions, plus mass displacement to Taiwan",
+ cause:"Ideological conflict between Nationalist and Communist parties.",
+ outcome:"Communist victory on the mainland; Nationalist government retreats to Taiwan.",
+ sources:["Library of Congress","multiple historians"]},
+{name:"Second Sino-Japanese War",start:1937,end:1945,era:"20c",countries:["China","Japan"],govs:["Republic of China","Empire of Japan"],
+ toll:{off:null,disp:null,est:[15000000,20000000]},injuries:"Includes the disputed Nanjing Massacre toll",
+ cause:"Japanese imperial expansion into China.",
+ outcome:"Japanese surrender in 1945, folded into WWII Pacific theater conclusion.",
+ flag:"Nanjing Massacre death toll (est. 40,000-300,000) is one of the most politically disputed figures in modern history between Chinese and some Japanese sources.",
+ sources:["National WWII Museum","multiple national archives"]},
+{name:"Spanish Civil War",start:1936,end:1939,era:"20c",countries:["Spain"],govs:["Second Spanish Republic","Nationalist faction (Franco)"],
+ toll:{off:null,disp:null,est:[500000,1000000]},injuries:"Includes mass post-war reprisal killings",
+ cause:"Political polarization; military uprising against the Republic.",
+ outcome:"Nationalist victory; Francisco Franco's dictatorship begins.",
+ sources:["multiple historians"]},
+{name:"Armenian Genocide",start:1915,end:1917,era:"20c",countries:["Ottoman Empire"],govs:["Ottoman Empire"],
+ toll:{off:null,disp:null,est:[600000,1500000]},injuries:"Mass deportation and death marches",
+ cause:"Ottoman government campaign against ethnic Armenians during WWI.",
+ outcome:"Formation of independent Armenia in the war's aftermath; ongoing international dispute over the genocide designation.",
+ flag:"Turkey disputes the term \"genocide\" and offers substantially lower figures than most international scholars and over 30 recognizing governments.",
+ sources:["US Holocaust Memorial Museum","International Association of Genocide Scholars"]},
+{name:"American Civil War",start:1861,end:1865,era:"industrial",countries:["United States"],govs:["Union","Confederate States"],
+ toll:{off:null,disp:null,est:[620000,750000]},injuries:"Hundreds of thousands wounded",
+ cause:"Secession of southern states over slavery and states' rights.",
+ outcome:"Union victory; abolition of slavery via the 13th Amendment.",
+ flag:"Revised 2011 demographic study raised the long-accepted 620,000 figure to as high as 750,000.",
+ sources:["National Park Service","American Battlefield Trust"]},
+{name:"Taiping Rebellion",start:1850,end:1864,era:"industrial",countries:["China"],govs:["Qing Dynasty","Taiping Heavenly Kingdom"],
+ toll:{off:null,disp:null,est:[20000000,30000000]},injuries:"Mass famine and displacement across southern China",
+ cause:"Religious-political uprising against the Qing Dynasty led by Hong Xiuquan.",
+ outcome:"Qing government victory after immense loss of life; one of the deadliest conflicts in human history.",
+ sources:["Cambridge History of China","multiple historians"]},
+{name:"Napoleonic Wars",start:1803,end:1815,era:"industrial",countries:["Europe"],govs:["First French Empire","Coalition powers"],
+ toll:{off:null,disp:null,est:[3500000,6000000]},injuries:"Millions across a decade of continental warfare",
+ cause:"French revolutionary expansion under Napoleon Bonaparte.",
+ outcome:"Napoleon defeated at Waterloo (1815); Congress of Vienna reshapes Europe.",
+ sources:["multiple European national archives"]},
+{name:"American Revolutionary War",start:1775,end:1783,era:"early",countries:["United States","Great Britain"],govs:["Kingdom of Great Britain","United States (Continental Congress)"],
+ toll:{off:null,disp:null,est:[25000,70000]},injuries:"Includes disease deaths in military camps",
+ cause:"Colonial rebellion against British taxation and rule.",
+ outcome:"American independence recognized via the Treaty of Paris (1783).",
+ sources:["US National Archives"]},
+{name:"Seven Years' War",start:1756,end:1763,era:"early",countries:["Global"],govs:["Great Britain","France","Prussia","Austria","Russia"],
+ toll:{off:null,disp:null,est:[900000,1400000]},injuries:"Fought across Europe, the Americas, and Asia — sometimes called the first \"world war\"",
+ cause:"Colonial and territorial rivalry between major European powers.",
+ outcome:"British and Prussian gains; Treaty of Paris (1763) redrew colonial holdings.",
+ sources:["multiple European national archives"]},
+{name:"Thirty Years' War",start:1618,end:1648,era:"early",countries:["Central Europe"],govs:["Holy Roman Empire","various European powers"],
+ toll:{off:null,disp:null,est:[4500000,8000000]},injuries:"Widespread famine and disease; some German regions lost over a third of their population",
+ cause:"Religious conflict between Protestant and Catholic states, entangled with dynastic rivalry.",
+ outcome:"Peace of Westphalia (1648); reshaped the European state system.",
+ sources:["multiple European historians"]},
+{name:"Mongol Conquests",start:1206,end:1368,era:"medieval",countries:["Asia","Europe","Middle East"],govs:["Mongol Empire"],
+ toll:{off:null,disp:null,est:[20000000,60000000]},injuries:"Entire cities depopulated; long-term demographic collapse across Eurasia",
+ cause:"Unification of Mongol tribes under Genghis Khan and subsequent imperial expansion.",
+ outcome:"Formation of the largest contiguous land empire in history, later fragmenting into khanates.",
+ flag:"Estimates vary enormously due to the scale and lack of contemporaneous records across affected regions.",
+ sources:["multiple historians","Cambridge History of China"]},
+{name:"Crusades (overall, 1095-1291)",start:1095,end:1291,era:"medieval",countries:["Middle East","Europe"],govs:["Papal States","various Crusader states","Islamic caliphates/sultanates"],
+ toll:{off:null,disp:null,est:[1000000,9000000]},injuries:"Spans nine major campaigns over two centuries",
+ cause:"Religious conflict over control of the Holy Land, framed by the Papacy as reclaiming Jerusalem.",
+ outcome:"Ultimate failure of Crusader states; long-term religious and political consequences in Europe and the Middle East.",
+ flag:"Total figures are highly speculative given the span of two centuries and scattered medieval record-keeping.",
+ sources:["multiple medieval historians"]},
+{name:"An Lushan Rebellion",start:755,end:763,era:"medieval",countries:["China"],govs:["Tang Dynasty","Yan rebel state"],
+ toll:{off:null,disp:null,est:[13000000,36000000]},injuries:"Includes mass famine and displacement from disrupted agriculture",
+ cause:"Military rebellion against Tang Dynasty rule led by general An Lushan.",
+ outcome:"Tang Dynasty survived but was permanently weakened.",
+ flag:"The higher-end 36 million figure derives from a disputed census-based calculation, not a direct casualty count.",
+ sources:["Cambridge History of China"]},
+{name:"Fall of the Western Roman Empire (conflicts, c.376-476)",start:376,end:476,era:"ancient",countries:["Western Europe"],govs:["Western Roman Empire","various Germanic kingdoms"],
+ toll:{off:null,disp:null,est:[null,null]},injuries:"No reliable aggregate figures exist",
+ cause:"A century of migrations, invasions (Visigoths, Vandals, Huns), and internal political collapse.",
+ outcome:"Deposition of the last Western Roman Emperor in 476 CE; fragmentation into early medieval kingdoms.",
+ flag:"No usable casualty data survives from this period — included for historical completeness, not casualty tracking.",
+ sources:["multiple classical historians"]},
+{name:"Punic Wars (overall)",start:-264,end:-146,era:"ancient",countries:["Rome","Carthage"],govs:["Roman Republic","Carthage"],
+ toll:{off:null,disp:null,est:[1000000,1500000]},injuries:"Three wars over more than a century",
+ cause:"Rivalry between Rome and Carthage for dominance of the western Mediterranean.",
+ outcome:"Roman victory; complete destruction of Carthage in 146 BCE.",
+ sources:["classical historians (Polybius, Livy)"]},
+{name:"Wars of Alexander the Great",start:-336,end:-323,era:"ancient",countries:["Greece","Persia","Central Asia","India"],govs:["Macedonian Empire","Achaemenid Persia"],
+ toll:{off:null,disp:null,est:[1000000,2000000]},injuries:"Campaigns spanned three continents over 13 years",
+ cause:"Macedonian expansion following the conquest of the Persian Empire.",
+ outcome:"Creation of one of the largest empires in ancient history, fragmenting after Alexander's death.",
+ sources:["classical historians (Arrian, Plutarch)"]},
+{name:"Peloponnesian War",start:-431,end:-404,era:"ancient",countries:["Greece"],govs:["Athens (Delian League)","Sparta (Peloponnesian League)"],
+ toll:{off:null,disp:null,est:[100000,200000]},injuries:"Includes deaths from the plague of Athens",
+ cause:"Rivalry between Athens and Sparta for dominance of the Greek world.",
+ outcome:"Spartan victory; permanent weakening of Athenian power.",
+ sources:["Thucydides","classical historians"]},
+{name:"Assyrian Conquests",start:-900,end:-609,era:"ancient",countries:["Mesopotamia","Levant"],govs:["Neo-Assyrian Empire"],
+ toll:{off:null,disp:null,est:[null,null]},injuries:"No reliable aggregate survives; Assyrian records boast of mass deportations and killings as policy",
+ cause:"Systematic imperial expansion across Mesopotamia and the Levant.",
+ outcome:"Formation of the largest empire the world had yet seen, later collapsing to Babylonian-Median coalition.",
+ flag:"Casualty claims come primarily from Assyrian royal inscriptions themselves — a self-reported, propagandistic source, not independent record.",
+ sources:["Assyrian royal annals","modern Assyriology"]},
+{name:"Sumerian-Elamite Wars (earliest recorded wars)",start:-2700,end:-2500,era:"ancient",countries:["Mesopotamia"],govs:["Sumerian city-states","Elam"],
+ toll:{off:null,disp:null,est:[null,null]},injuries:"No usable figures survive",
+ cause:"Rivalry between early Mesopotamian city-states, among the earliest wars in written record.",
+ outcome:"Unknown/fragmentary; part of the broader pattern of Sumerian city-state conflict.",
+ flag:"Included as the earliest documented war in writing (cuneiform tablets) — establishes the archive's starting point, not a casualty record.",
+ sources:["cuneiform tablet records","Sumerian king lists"]},
+
+/* ===== BATCH 2 ===== */
+{name:"Gaza War (2023-2025)",start:2023,end:2025,era:"21c",countries:["Gaza Strip","Israel"],govs:["Hamas","Israel"],
+ toll:{off:null,disp:60000,est:[45000,64000]},injuries:"Over 100,000 reported wounded",
+ cause:"Hamas-led attack on Israel on 7 October 2023 followed by Israeli military response in Gaza.",
+ outcome:"Ceasefire and hostage-prisoner exchanges reached in phases through 2025; humanitarian devastation widespread.",
+ flag:"Gaza Health Ministry (Hamas-run) figures are disputed by Israel; UN and independent researchers largely treat them as broadly consistent with excess-mortality studies, though exact numbers remain contested.",
+ sources:["UN OCHA","Gaza Health Ministry","AP"]},
+{name:"Yemeni Civil War",start:2014,end:null,era:"21c",countries:["Yemen"],govs:["Houthi movement","Internationally Recognized Government of Yemen","Saudi-led coalition"],
+ toll:{off:null,disp:null,est:[150000,377000]},injuries:"Millions displaced; famine and disease deaths dominate the toll",
+ cause:"Houthi takeover of Sana'a triggering Saudi-led intervention amid a broader Yemeni political crisis.",
+ outcome:"Ongoing low-intensity conflict as of 2026 despite periodic truces.",
+ flag:"UN's often-cited 377,000 figure (2021) includes indirect deaths from disease/hunger, not just combat — frequently conflated in media reporting.",
+ sources:["UN Development Programme","ACLED"]},
+{name:"Tigray War",start:2020,end:2022,era:"21c",countries:["Ethiopia"],govs:["Ethiopian federal government","Tigray People's Liberation Front","Eritrea"],
+ toll:{off:null,disp:null,est:[162000,600000]},injuries:"Mass sexual violence and famine documented by international monitors",
+ cause:"Political conflict between Ethiopia's federal government and the Tigray regional government.",
+ outcome:"Pretoria peace agreement signed November 2022.",
+ flag:"Estimates vary by a factor of nearly 4x; Ethiopian federal government disputes the higher independent academic estimates.",
+ sources:["Ghent University researchers","Reuters","AP"]},
+{name:"Libyan Civil War (2011)",start:2011,end:2011,era:"21c",countries:["Libya"],govs:["Gaddafi government","National Transitional Council","NATO"],
+ toll:{off:null,disp:null,est:[10000,30000]},injuries:"Tens of thousands wounded",
+ cause:"Arab Spring uprising against Muammar Gaddafi's rule, escalating to NATO-backed intervention.",
+ outcome:"Gaddafi killed October 2011; prolonged instability followed for over a decade.",
+ sources:["UN","Human Rights Watch"]},
+{name:"War in Donbas (2014-2022)",start:2014,end:2022,era:"21c",countries:["Ukraine"],govs:["Ukraine","Donetsk/Luhansk separatist republics","Russia"],
+ toll:{off:null,disp:null,est:[14000,14400]},injuries:"Tens of thousands wounded over eight years",
+ cause:"Pro-Russian separatist uprisings in eastern Ukraine following the 2014 Euromaidan revolution and Crimea annexation.",
+ outcome:"Absorbed into the full-scale Russian invasion of Ukraine in February 2022.",
+ sources:["UN OHCHR","OSCE"]},
+{name:"South Sudanese Civil War",start:2013,end:2020,era:"21c",countries:["South Sudan"],govs:["South Sudanese government","SPLM-IO opposition"],
+ toll:{off:null,disp:null,est:[190000,383000]},injuries:"Millions displaced; famine conditions repeatedly declared",
+ cause:"Political rift between President Salva Kiir and former Vice President Riek Machar shortly after independence.",
+ outcome:"Revitalized peace agreement 2018; unity government formed 2020, though instability persisted.",
+ flag:"The 383,000 estimate (LSHTM study, 2018) is substantially higher than earlier UN estimates and remains debated.",
+ sources:["London School of Hygiene & Tropical Medicine","UN"]},
+{name:"Somali Civil War (ongoing phases)",start:1991,end:null,era:"20c",countries:["Somalia"],govs:["Transitional/Federal Government of Somalia","al-Shabaab","various clan militias"],
+ toll:{off:null,disp:null,est:[300000,500000]},injuries:"Includes deaths from associated famine (notably 1991-92 and 2011)",
+ cause:"Collapse of the Siad Barre government leading to prolonged clan-based civil war.",
+ outcome:"No definitive end; low-intensity conflict and insurgency continue as of 2026.",
+ sources:["UN","Human Rights Watch"]},
+{name:"Bosnian War",start:1992,end:1995,era:"20c",countries:["Bosnia and Herzegovina"],govs:["Republic of Bosnia and Herzegovina","Republika Srpska","Croatian Defence Council"],
+ toll:{off:null,disp:null,est:[97000,105000]},injuries:"Mass ethnic cleansing and sexual violence documented, including the Srebrenica genocide",
+ cause:"Breakup of Yugoslavia and ethnic-nationalist conflict between Bosniaks, Serbs, and Croats.",
+ outcome:"Dayton Agreement signed 1995, ending the war and partitioning Bosnia.",
+ flag:"Srebrenica massacre death toll (over 8,000) is legally established by international tribunals but still denied or minimized by some Serbian nationalist sources.",
+ sources:["ICTY","Research and Documentation Center Sarajevo"]},
+{name:"Gulf War: Kuwaiti oil fires aftermath / Iraqi uprisings (1991)",start:1991,end:1991,era:"20c",countries:["Iraq"],govs:["Ba'athist Iraq","Kurdish and Shia rebel factions"],
+ toll:{off:null,disp:null,est:[20000,100000]},injuries:"Mass displacement of Kurdish population into Turkey and Iran",
+ cause:"Post-Gulf War uprisings by Kurds and Shia Muslims against Saddam Hussein's government, encouraged but not militarily backed by the US.",
+ outcome:"Uprisings brutally suppressed; no-fly zones later established over Kurdish and Shia regions.",
+ sources:["Human Rights Watch","UN"]},
+{name:"Soviet-Afghan War",start:1979,end:1989,era:"20c",countries:["Afghanistan","Soviet Union"],govs:["Democratic Republic of Afghanistan","Soviet Union","Mujahideen factions"],
+ toll:{off:null,disp:null,est:[1000000,2000000]},injuries:"Millions of Afghan refugees displaced to Pakistan and Iran",
+ cause:"Soviet military intervention to support the communist Afghan government against a growing insurgency.",
+ outcome:"Soviet withdrawal 1989; continued Afghan civil war afterward.",
+ sources:["Brookings Institution","UN"]},
+{name:"Falklands War",start:1982,end:1982,era:"20c",countries:["Argentina","United Kingdom"],govs:["Argentina (military junta)","United Kingdom"],
+ toll:{off:null,disp:null,est:[900,1000]},injuries:"Hundreds wounded on both sides",
+ cause:"Argentine invasion of the British-controlled Falkland Islands.",
+ outcome:"British military victory; islands remained under UK control.",
+ sources:["UK Ministry of Defence","Argentine government archives"]},
+{name:"Cambodian Genocide (Khmer Rouge era)",start:1975,end:1979,era:"20c",countries:["Cambodia"],govs:["Khmer Rouge (Democratic Kampuchea)"],
+ toll:{off:null,disp:null,est:[1500000,2000000]},injuries:"Approximately a quarter of Cambodia's population died from execution, forced labor, and starvation",
+ cause:"Khmer Rouge communist regime's radical agrarian policies and purges under Pol Pot.",
+ outcome:"Regime overthrown by Vietnamese invasion in 1979; leaders later tried by a UN-backed tribunal.",
+ sources:["Documentation Center of Cambodia","UN-backed ECCC tribunal"]},
+{name:"Bangladesh Liberation War",start:1971,end:1971,era:"20c",countries:["Bangladesh","Pakistan","India"],govs:["Pakistan","Provisional Government of Bangladesh","India"],
+ toll:{off:null,disp:3000000,est:[300000,3000000]},injuries:"Mass sexual violence documented; millions of refugees fled to India",
+ cause:"Political and ethnic conflict between East and West Pakistan escalating to war after a Pakistani military crackdown.",
+ outcome:"Indian intervention led to Pakistani surrender; Bangladesh gained independence.",
+ flag:"Bangladesh's official figure of 3 million is disputed by independent researchers and by Pakistan, who cite far lower numbers — one of the most politically charged casualty disputes in South Asian history.",
+ sources:["Bangladesh government","independent historians"]},
+{name:"Nigerian Civil War (Biafra)",start:1967,end:1970,era:"20c",countries:["Nigeria"],govs:["Nigeria","Republic of Biafra"],
+ toll:{off:null,disp:null,est:[1000000,3000000]},injuries:"Most deaths attributed to famine caused by blockade",
+ cause:"Attempted secession of the Biafra region amid ethnic tension between Igbo and other Nigerian groups.",
+ outcome:"Biafran surrender in 1970; Nigeria reunified.",
+ sources:["UN","multiple historians"]},
+{name:"Algerian War of Independence",start:1954,end:1962,era:"20c",countries:["Algeria","France"],govs:["France","National Liberation Front (FLN)"],
+ toll:{off:null,disp:null,est:[350000,1500000]},injuries:"Widespread use of torture documented on both sides",
+ cause:"Algerian independence movement against French colonial rule.",
+ outcome:"Algerian independence achieved via the Evian Accords in 1962.",
+ flag:"Algerian government figures (over 1 million) are substantially higher than French historians' estimates (around 350,000-400,000) — a long-standing point of dispute.",
+ sources:["French national archives","Algerian government"]},
+{name:"Holocaust (as a war-adjacent atrocity within WWII)",start:1941,end:1945,era:"20c",countries:["Nazi-occupied Europe"],govs:["Nazi Germany"],
+ toll:{off:6000000,disp:null,est:[5100000,6000000]},injuries:"Millions more subjected to forced labor, medical experimentation, and imprisonment",
+ cause:"Systematic state-organized genocide of European Jews and other targeted groups under Nazi ideology.",
+ outcome:"Ended with Allied victory in WWII and liberation of concentration camps in 1945.",
+ sources:["US Holocaust Memorial Museum","Yad Vashem"]},
+{name:"Winter War",start:1939,end:1940,era:"20c",countries:["Finland","Soviet Union"],govs:["Finland","Soviet Union"],
+ toll:{off:null,disp:null,est:[50000,150000]},injuries:"Finnish forces inflicted disproportionate Soviet casualties despite being outnumbered",
+ cause:"Soviet invasion of Finland following the Molotov-Ribbentrop Pact's secret protocols.",
+ outcome:"Finland ceded territory but retained independence via the Moscow Peace Treaty.",
+ sources:["Finnish National Archives","Soviet military records"]},
+{name:"Boxer Rebellion",start:1899,end:1901,era:"industrial",countries:["China"],govs:["Qing Dynasty","Eight-Nation Alliance"],
+ toll:{off:null,disp:null,est:[100000,200000]},injuries:"Includes widespread reprisal killings after the rebellion's suppression",
+ cause:"Anti-foreign, anti-Christian uprising in China against imperialist encroachment, later backed by the Qing court.",
+ outcome:"Alliance victory; Boxer Protocol imposed heavy indemnities and further weakened Qing sovereignty.",
+ sources:["Cambridge History of China"]},
+{name:"Second Boer War",start:1899,end:1902,era:"industrial",countries:["South Africa"],govs:["British Empire","Boer republics (Transvaal, Orange Free State)"],
+ toll:{off:null,disp:null,est:[75000,100000]},injuries:"Tens of thousands of Boer civilians, mostly women and children, died in British-run concentration camps",
+ cause:"British imperial expansion into Boer-controlled territory, partly driven by the discovery of gold and diamonds.",
+ outcome:"British victory; Boer republics annexed, later forming the Union of South Africa.",
+ flag:"The concentration camp death toll was long minimized in British accounts; modern historians treat it as a documented atrocity, not a wartime footnote.",
+ sources:["South African War Museum","British national archives"]},
+{name:"First Sino-Japanese War",start:1894,end:1895,era:"industrial",countries:["China","Japan","Korea"],govs:["Qing Dynasty","Empire of Japan"],
+ toll:{off:null,disp:null,est:[35000,35000]},injuries:"Marked the emergence of Japan as a regional military power",
+ cause:"Rivalry over dominance of Korea between Qing China and Meiji Japan.",
+ outcome:"Japanese victory; Treaty of Shimonoseki ceded Taiwan and other territory to Japan.",
+ sources:["Cambridge History of China","Japanese military archives"]},
+{name:"Franco-Prussian War",start:1870,end:1871,era:"industrial",countries:["France","Prussia/German states"],govs:["Second French Empire","Kingdom of Prussia"],
+ toll:{off:null,disp:null,est:[184000,250000]},injuries:"Siege of Paris caused severe civilian hardship and starvation",
+ cause:"Prussian ambitions for German unification and French objections to a Hohenzollern candidate for the Spanish throne.",
+ outcome:"Decisive Prussian/German victory; unification of Germany proclaimed at Versailles; French Third Republic established.",
+ sources:["German and French national archives"]},
+{name:"Paraguayan War (War of the Triple Alliance)",start:1864,end:1870,era:"industrial",countries:["Paraguay","Brazil","Argentina","Uruguay"],govs:["Paraguay","Triple Alliance (Brazil, Argentina, Uruguay)"],
+ toll:{off:null,disp:null,est:[300000,400000]},injuries:"Paraguay reportedly lost more than half its pre-war population, one of the highest proportional losses in recorded history",
+ cause:"Regional power struggle over territory and river access in the Rio de la Plata basin.",
+ outcome:"Devastating defeat for Paraguay; massive territorial losses and demographic collapse.",
+ flag:"Paraguayan population-loss estimates have been challenged by some modern demographers as likely exaggerated relative to census data of the time, though catastrophic losses are not disputed.",
+ sources:["Latin American historians","Paraguayan national archives"]},
+{name:"Crimean War",start:1853,end:1856,era:"industrial",countries:["Russia","Ottoman Empire","France","Britain"],govs:["Russian Empire","Ottoman Empire","France","United Kingdom"],
+ toll:{off:null,disp:null,est:[500000,650000]},injuries:"Most deaths came from disease rather than combat, prompting Florence Nightingale's nursing reforms",
+ cause:"Russian expansionism into Ottoman territory and rivalry over religious protection rights in the Holy Land.",
+ outcome:"Treaty of Paris (1856); Russian expansion checked, at high cost to all sides.",
+ sources:["British and Russian national archives"]},
+{name:"Mexican-American War",start:1846,end:1848,era:"industrial",countries:["Mexico","United States"],govs:["Mexico","United States"],
+ toll:{off:null,disp:null,est:[13000,25000]},injuries:"Includes large numbers of disease deaths among US troops",
+ cause:"Territorial dispute following US annexation of Texas and expansionist ambitions ('Manifest Destiny').",
+ outcome:"US victory; Treaty of Guadalupe Hidalgo transferred vast Mexican territory to the United States.",
+ sources:["US National Archives","Mexican national archives"]},
+{name:"Greek War of Independence",start:1821,end:1832,era:"early",countries:["Greece","Ottoman Empire"],govs:["Ottoman Empire","Greek revolutionary factions"],
+ toll:{off:null,disp:null,est:[105000,250000]},injuries:"Includes mass atrocities against civilians on both sides, notably the Chios massacre",
+ cause:"Greek nationalist uprising against centuries of Ottoman rule, backed eventually by European powers.",
+ outcome:"Greek independence recognized in 1832 following European intervention.",
+ sources:["Greek national archives","Ottoman archives"]},
+{name:"Haitian Revolution",start:1791,end:1804,era:"early",countries:["Saint-Domingue (Haiti)"],govs:["French colonial government","Haitian revolutionary forces"],
+ toll:{off:null,disp:null,est:[150000,350000]},injuries:"The only successful slave revolt that led to the founding of an independent state",
+ cause:"Enslaved population's uprising against French colonial rule and slavery, inspired partly by the French Revolution.",
+ outcome:"Haitian independence declared 1804 — the first Black-led republic and the only nation founded by a successful slave revolt.",
+ sources:["multiple Caribbean and French historians"]},
+{name:"Anglo-Mysore Wars (overall)",start:1767,end:1799,era:"early",countries:["India"],govs:["Kingdom of Mysore","British East India Company"],
+ toll:{off:null,disp:null,est:[100000,200000]},injuries:"Four wars over three decades",
+ cause:"Resistance by Mysore rulers Hyder Ali and Tipu Sultan against British East India Company expansion.",
+ outcome:"British victory in the Fourth Anglo-Mysore War (1799); Tipu Sultan killed; Company control over southern India expanded.",
+ sources:["British India Office records"]},
+{name:"King Philip's War",start:1675,end:1678,era:"early",countries:["New England"],govs:["Wampanoag Confederacy","New England colonies"],
+ toll:{off:null,disp:null,est:[3000,5000]},injuries:"Proportionally one of the deadliest wars in American history relative to population",
+ cause:"Escalating tension between English colonists and Native American tribes over land and sovereignty.",
+ outcome:"Colonial victory; devastating long-term consequences for New England's indigenous population.",
+ sources:["multiple American historians"]},
+{name:"Hundred Years' War",start:1337,end:1453,era:"medieval",countries:["France","England"],govs:["Kingdom of England","Kingdom of France"],
+ toll:{off:null,disp:null,est:[2300000,3300000]},injuries:"Includes deaths from the Black Death, which struck during the conflict and compounded losses",
+ cause:"Dynastic dispute over the French throne between the English and French royal houses.",
+ outcome:"French victory; England lost nearly all its continental territories.",
+ sources:["multiple medieval historians"]},
+{name:"Reconquista (overall span)",start:718,end:1492,era:"medieval",countries:["Iberian Peninsula"],govs:["various Christian Iberian kingdoms","Muslim Iberian states (Al-Andalus)"],
+ toll:{off:null,disp:null,est:[null,null]},injuries:"No reliable aggregate exists across nearly 800 years of intermittent conflict",
+ cause:"Centuries-long Christian campaign to retake the Iberian Peninsula from Muslim rule.",
+ outcome:"Completed with the fall of Granada in 1492, the same year as Columbus's voyage.",
+ flag:"Spans nearly eight centuries — included for historical scope, not as a single countable war with a casualty figure.",
+ sources:["multiple Iberian historians"]},
+{name:"Viking Age raids and conquests (overall)",start:793,end:1066,era:"medieval",countries:["Northern Europe","British Isles"],govs:["various Norse kingdoms","Anglo-Saxon and Frankish kingdoms"],
+ toll:{off:null,disp:null,est:[null,null]},injuries:"No reliable aggregate survives across nearly three centuries of raiding, settlement, and conquest",
+ cause:"Norse expansion driven by trade, raiding, and settlement across Europe.",
+ outcome:"Ended symbolically with the Norman Conquest of England in 1066 and gradual Christianization of Scandinavia.",
+ flag:"Treated here as a broad historical period rather than a single war; no unified casualty record exists.",
+ sources:["multiple Norse and European historians"]},
+{name:"Gallic Wars",start:-58,end:-50,era:"ancient",countries:["Gaul"],govs:["Roman Republic","Gallic tribal confederations"],
+ toll:{off:null,disp:null,est:[1000000,3000000]},injuries:"Julius Caesar's own accounts claim roughly 1 million killed and 1 million enslaved",
+ cause:"Roman expansion into Gaul under Julius Caesar.",
+ outcome:"Roman conquest of Gaul, cementing Caesar's political and military power.",
+ flag:"Primary casualty source is Caesar's own 'Commentarii de Bello Gallico' — a self-authored account with clear political motive to exaggerate his achievements.",
+ sources:["Caesar's Commentarii de Bello Gallico","modern classical historians"]},
+{name:"Wars of the Three Kingdoms (Chinese, 220-280)",start:220,end:280,era:"ancient",countries:["China"],govs:["Wei","Shu Han","Eastern Wu"],
+ toll:{off:null,disp:null,est:[36000000,40000000]},injuries:"Census data shows a massive population decline across the period, though causes beyond warfare (famine, disease) contributed",
+ cause:"Collapse of the Han Dynasty into three rival kingdoms vying for reunification.",
+ outcome:"Jin Dynasty eventually reunified China in 280 CE.",
+ flag:"The extreme population-decline figures are census-based, not direct casualty counts, and are debated among historians as likely including undercount/migration effects, not just deaths.",
+ sources:["Cambridge History of China"]},
+{name:"Jewish-Roman Wars (overall, 66-135 CE)",start:66,end:135,era:"ancient",countries:["Judea"],govs:["Roman Empire","Jewish rebel factions"],
+ toll:{off:null,disp:null,est:[600000,1350000]},injuries:"Includes destruction of the Second Temple in 70 CE and mass enslavement following the Bar Kokhba revolt",
+ cause:"Jewish revolts against Roman rule and taxation across three successive conflicts.",
+ outcome:"Roman victory; Jewish population of Judea drastically reduced; the province renamed Syria Palaestina.",
+ flag:"Casualty figures come primarily from the Roman historian Josephus, a Jewish commander who defected to Rome — a source with documented bias in both directions depending on audience.",
+ sources:["Josephus's Jewish War","modern classical historians"]}
+];
+
+/* ===== RENDER ===== */
+const eraNames={ancient:"Ancient",medieval:"Medieval",early:"Early Modern",industrial:"Industrial Age",
+  "20c":"20th Century","21c":"21st Century"};
+const eraOrder=["21c","20c","industrial","early","medieval","ancient"];
+let currentEra="all",currentSort="year",query="",currentCentury="all",currentTollMin=0;
+
+function centuryOf(year){
+  const y = year<0 ? year : year;
+  const c = y<0 ? Math.ceil(Math.abs(y)/100) : Math.ceil(y/100);
+  return y<0 ? `${c}th c. BCE` : `${c}th c.`;
+}
+function populateCenturies(){
+  const set=new Set(WARS.map(w=>centuryOf(w.start)));
+  const sel=document.getElementById('centuryFilter');
+  const order=WARS.slice().sort((a,b)=>b.start-a.start).map(w=>centuryOf(w.start));
+  const seen=new Set();
+  order.forEach(c=>{
+    if(seen.has(c))return;seen.add(c);
+    const opt=document.createElement('option');opt.value=c;opt.textContent=c;sel.appendChild(opt);
+  });
+}
+
+function tollMax(t){if(t.off)return t.off;if(t.disp)return t.disp;if(t.est&&t.est[1])return t.est[1];return 0;}
+function tollBadges(t){
+  let html='';
+  if(t.off)html+=`<span class="badge off">OFFICIAL ${fmt(t.off)}</span>`;
+  if(t.disp)html+=`<span class="badge disp">DISPUTED ${fmt(t.disp)}</span>`;
+  if(t.est&&t.est[0])html+=`<span class="badge est">EST ${fmt(t.est[0])}–${fmt(t.est[1])}</span>`;
+  if(!t.off&&!t.disp&&(!t.est||!t.est[0]))html+=`<span class="badge est">NO RELIABLE COUNT</span>`;
+  return html;
+}
+function fmt(n){return n>=1000000?(n/1000000).toFixed(n%1000000===0?0:1)+"M":n.toLocaleString();}
+function escHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+function matchesQuery(w,q){
+  if(!q)return true;
+  const hay=[w.name,...(w.countries||[]),...(w.govs||[]),String(w.start),String(w.end)].join(' ').toLowerCase();
+  return hay.includes(q.toLowerCase());
+}
+
+function render(){
+  const wrap=document.getElementById('eras');wrap.innerHTML='';
+  const filtered=WARS.filter(w=>(currentEra==='all'||w.era===currentEra)&&matchesQuery(w,query)
+    &&(currentCentury==='all'||centuryOf(w.start)===currentCentury)
+    &&(currentTollMin===0||tollMax(w.toll)>=currentTollMin));
+  document.getElementById('resultCount').textContent=filtered.length+' CONFLICTS';
+  const byEra={};
+  filtered.forEach(w=>{(byEra[w.era]=byEra[w.era]||[]).push(w);});
+  eraOrder.forEach(era=>{
+    if(!byEra[era]||!byEra[era].length)return;
+    let list=byEra[era].slice();
+    if(currentSort==='deaths')list.sort((a,b)=>tollMax(b.toll)-tollMax(a.toll));
+    else list.sort((a,b)=>b.start-a.start);
+    const sec=document.createElement('div');
+    sec.innerHTML=`<div class="era"><h2>${eraNames[era]}</h2></div>`;
+    const tl=document.createElement('div');tl.className='timeline';
+    list.forEach((w,i)=>{
+      const id='w'+era+i;
+      const maxT=Math.max(...WARS.map(x=>tollMax(x.toll)),1);
+      const pct=Math.min(100,(tollMax(w.toll)/maxT)*100);
+      const card=document.createElement('div');card.className='card';card.id=id;
+      card.innerHTML=`
+        <div class="head" onclick="toggleCard('${id}')">
+          <div><div class="name">${escHtml(w.name)}</div><div class="years mono">${w.start<0?Math.abs(w.start)+' BCE':w.start} – ${w.end===null?'ONGOING':(w.end<0?Math.abs(w.end)+' BCE':w.end)}</div></div>
+          <div>${tollBadges(w.toll)}</div>
+        </div>
+        <div class="scale"><i style="width:${pct}%"></i></div>
+        <div class="body">
+          <div class="row"><b>Countries</b><span>${escHtml((w.countries||[]).join(', '))}</span></div>
+          <div class="row"><b>Governments</b><span>${escHtml((w.govs||[]).join(', '))}</span></div>
+          <div class="row"><b>Cause</b><span>${escHtml(w.cause||'')}</span></div>
+          <div class="row"><b>Outcome</b><span>${escHtml(w.outcome||'')}</span></div>
+          <div class="row"><b>Injuries</b><span>${escHtml(w.injuries||'Not reliably documented')}</span></div>
+          ${w.flag?`<div class="flagnote">⚑ ${escHtml(w.flag)}</div>`:''}
+          ${(w.events&&w.events.length)?`<div class="subtl-head">Internal Timeline</div><div class="subtl">${w.events.map(ev=>`<div class="subitem"><span class="sdate">${escHtml(ev.date)}</span><span class="stext">${escHtml(ev.text)}</span></div>`).join('')}</div>`:''}
+          <div class="sources">SOURCES: ${escHtml((w.sources||[]).join(' · '))}</div>
+        </div>`;
+      tl.appendChild(card);
+    });
+    sec.appendChild(tl);
+    wrap.appendChild(sec);
+  });
+}
+function toggleCard(id){document.getElementById(id).classList.toggle('open');}
+
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');currentEra=b.dataset.era;render();
+}));
+document.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');currentSort=b.dataset.sort;render();
+}));
+document.getElementById('search').addEventListener('input',e=>{query=e.target.value;render();});
+populateCenturies();
+document.getElementById('centuryFilter').addEventListener('change',e=>{currentCentury=e.target.value;render();});
+document.getElementById('tollFilter').addEventListener('change',e=>{currentTollMin=Number(e.target.value)||0;render();});
+
+render();
+
+/* ===== GENERATIVE SIGNAL CANVAS — auto-playing, data-driven from WARS[] ===== */
+(function(){
+  const cv=document.getElementById('signal-canvas');if(!cv)return;
+  const cx=cv.getContext('2d');
+  let w,h,cx0,cy0,sweepAngle=0;
+  function resize(){w=cv.width=window.innerWidth;h=cv.height=window.innerHeight;cx0=w/2;cy0=h/2;}
+  window.addEventListener('resize',resize);resize();
+
+  /* Each blip is generated directly from a war record: angle from era index, radius from toll magnitude, pulse speed from death toll. Not decorative noise — the visual IS the dataset. */
+  const eraAngles={"21c":0,"20c":60,"industrial":120,"early":180,"medieval":240,"ancient":300};
+  const blips=WARS.map((wobj,i)=>{
+    const baseAngle=(eraAngles[wobj.era]||0)+((i*37)%55);
+    const maxR=Math.min(w,h)*0.42;
+    const t=tollMax(wobj.toll);
+    const logT=Math.log10(Math.max(t,10));
+    const radius=18+Math.min(logT*22,maxR-18);
+    return {
+      angle:baseAngle*(Math.PI/180),
+      radius,
+      mag:logT,
+      phase:Math.random()*Math.PI*2,
+      speed:0.4+Math.min(logT*0.15,1.2),
+      name:wobj.name
+    };
+  });
+
+  function draw(){
+    if(!window.pageVisible){requestAnimationFrame(draw);return;}
+    cx.clearRect(0,0,w,h);
+    /* radar rings */
+    cx.strokeStyle='rgba(201,162,75,0.08)';cx.lineWidth=1;
+    for(let r=1;r<=4;r++){
+      cx.beginPath();cx.arc(cx0,cy0,(Math.min(w,h)*0.42/4)*r,0,Math.PI*2);cx.stroke();
+    }
+    /* sweep */
+    sweepAngle+=0.006;
+    const grad=cx.createConicGradient?cx.createConicGradient(sweepAngle,cx0,cy0):null;
+    cx.save();
+    cx.beginPath();cx.moveTo(cx0,cy0);
+    cx.arc(cx0,cy0,Math.min(w,h)*0.44,sweepAngle,sweepAngle+0.5);
+    cx.closePath();
+    cx.fillStyle='rgba(201,162,75,0.05)';
+    cx.fill();
+    cx.restore();
+    /* blips: pulse rate + brightness driven by each war's death toll magnitude */
+    const now=performance.now()/1000;
+    blips.forEach(b=>{
+      const pulse=(Math.sin(now*b.speed+b.phase)+1)/2;
+      const x=cx0+Math.cos(b.angle)*b.radius;
+      const y=cy0+Math.sin(b.angle)*b.radius*0.55;
+      const size=1.2+b.mag*0.35+pulse*1.5;
+      const alpha=0.15+pulse*0.35;
+      cx.beginPath();
+      cx.fillStyle=`rgba(201,162,75,${alpha.toFixed(3)})`;
+      cx.arc(x,y,size,0,Math.PI*2);
+      cx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+
+/* ===== CANONICAL AVIDAA CHATBOT MODULE (WARS-adapted) ===== */
+window.pageVisible = window.pageVisible===undefined ? true : window.pageVisible;
+document.addEventListener('visibilitychange',()=>{window.pageVisible=!document.hidden;});
+let chatLastResponse='';
+
+/* KB — WARS-specific entries first, then the standard AVIDAA-pages KB.  excluded. */
+const KB=[
+  {k:['deadliest','most death','worst war','biggest war','highest toll'],r:['__WARS_DEADLIEST__']},
+  {k:['how many wars','total wars','wars documented','how big is this','coverage'],r:['__WARS_COUNT__']},
+  {k:['official','disputed','estimated','why three numbers','toll method','methodology','sourcing'],r:['This archive never merges figures into one convenient number. OFFICIAL is a government-issued count, DISPUTED is a contested/alternate figure, ESTIMATED is an independent researcher range. Where a state account and independent historians disagree, the entry says so.','The three-tier toll system exists because history gets revised, concealed, or politicized. Showing all sides preserves the disagreement itself as data.']},
+  {k:['what is avidaa wars','wars archive','this page','wars page'],r:['AVIDAA WARS is a standing archive of documented conflicts from ancient Sumer through 2026, built so casualty figures cannot be quietly revised or forgotten. Every entry separates official, disputed, and estimated tolls, and flags entries where governments or historians disagree.']},
+  {k:['what is avidaa','avidaa brand','about avidaa','avidaa platform','avidaa ecosystem'],r:['AVIDAA is a digital brand and platform ecosystem. Not an app — a declaration. Knowledge belongs to everyone. Est. 2025 by IO, built for humans and AI, knowledge made clear.','AVIDAA began in 2025 — books, music, AI, code, then a full platform. Signal beneath the noise.']},
+  {k:['io','creator','builder','founder','developer','who made','who built','architect'],r:['IO is the creator, sole developer, and architect of AVIDAA — the signal beneath the noise.'],link:'https://avidaa1.github.io/io'},
+  {k:['hub','main','platform','pages','knowledge','website'],r:['AVIDAA HUB — the core platform, dozens of pages in one file.'],link:'https://avidaa1.github.io/hub'},
+  {k:['stoa','stoic','stoicism','marcus','aurelius'],r:['AVIDAA STOA — the full Stoic archive, sourced quotes, and the MARCUS AI advisor.'],link:'https://avidaa1.github.io/stoa'},
+  {k:['ai archive','ai page','artificial intelligence'],r:['AI ARCHIVE — a living encyclopedia of AI from the 1940s to now.'],link:'https://avidaa1.github.io/ai'},
+  {k:['global','power','network','elite','federal reserve','blackrock'],r:['AVIDAA GLOBAL — a documented map of global power, sourced from court filings and FOIA.'],link:'https://avidaa1.github.io/global'},
+  {k:['origins','civilization','ancient','sumer','egypt','mesopotamia'],r:['AVIDAA ORIGINS — the full ancient civilization timeline, 5,500+ years.'],link:'https://avidaa1.github.io/origins'},
+  {k:['terra','nature','earth','animals','extinction'],r:['AVIDAA TERRA — a living nature library, from first cells to the sixth extinction.'],link:'https://avidaa1.github.io/terra'},
+  {k:['bitcoin','btc','crypto','blockchain'],r:['AVIDAA BITCOIN — on-chain metrics, halvings, macro and geopolitics.'],link:'https://avidaa1.github.io/bitcoin'},
+  {k:['downloads','download','tools','rabbit hole','secret page'],r:['AVIDAA keeps its tools tucked away — some you find, some you earn. Whisper "rabbit" if you like a challenge.']},
+  {k:['rabbit','hole','down the rabbit','signal down','secret','quest'],r:['__QUEST_1__']},
+  {k:['where does he live','where is io','what country','location','nationality','real name'],r:['AVIDAA is a global signal — no country, no coordinates. IO is the work, not a location.']},
+  {k:['hello','hi','hey','sup','yo','begin'],r:['Signal received. Ask me about a war in this archive, or about AVIDAA itself.','AVIDAA WARS online. What do you want to know?']},
+  {k:['thanks','thank','good','nice','cool'],r:['That is what this archive is built for.','Anytime — the record stays open.']},
+  {k:['who are you','what are you','are you ai','chatbot','what can you do'],r:['I run entirely in your browser, from the data baked into this page. No server, no tracking. Ask me about any war, or about AVIDAA.']},
+];
+
+/* ===== TIER 1 — RABBIT QUEST ===== */
+let t1Active=false, t1Answered={};
+const T1_BLOB='mo+y9kT7yvUzdvJfRGq3L4es7g==.cyDBGT0ieWN0pNBew/O3xw==.u593qaVgoL26XKk3.OYFx/BgQJgWz1lFHTncG5LdbYzGXkrOUx5a87jme0xDZP2tzDRY1Bm5BgTzXcwvj.sLyHBeNKDrs1rxHblG+JHx5lkkM3y4U=';
+const T1_RIDDLES=[
+  {q:"AVIDAA is the signal beneath the ____",ans:"noise",hint:"It's the page's core line — signal beneath the ____"},
+  {q:"AVIDAA was founded in the year ____",ans:"2025",hint:"Check the footer — Est. 2025"},
+];
+function setQuestBar(stage,override){
+  const bar=document.getElementById('quest-bar'),fill=document.getElementById('quest-fill'),lbl=document.getElementById('quest-label');
+  if(!bar||!fill||!lbl)return;
+  if(stage===0){bar.classList.remove('active');lbl.classList.remove('active');return;}
+  const q=override||{pct:25,color:'#c9a24b',label:'SIGNAL'};
+  bar.classList.add('active');lbl.classList.add('active');
+  fill.style.width=q.pct+'%';fill.style.background=q.color;fill.style.boxShadow='0 0 8px '+q.color;
+  lbl.textContent=q.label;lbl.style.color=q.color;
+}
+
+/* ===== TIER 2 — THE FLAME ===== */
+const T2_BLOB='V9dFikRt8D4C4iKAp2lEuct8wsQ=.516IOB2ZHLesUzHC5jw4qw==.kk9MQpaRWhB5uuc0.VLJKsWe4AmWqHQACcdCJmfOE1Hsx0Gq7AqD6W5qLQlBVD4gaeZEAjIGxjfxM4g27odkF5b7prrRTKg==.VTUUOv/2Ts/v/koDb7hiq4TAPiWUFGUp';
+const T2_RIDDLES=[
+  {q:"AVIDAA signal first lit in the year ____",ans:"2025",hint:"Check the footer — Est. 2025"},
+  {q:"AVIDAA is built for two kinds of mind: humans and ____",ans:"ai",hint:"Read the footer tagline"},
+  {q:"IO vision: knowledge made ____",ans:"clear",hint:"Signal over noise — knowledge made ____"},
+];
+let t2Answered={},t2Active=false;
+function t2Norm(s){return s.toLowerCase().trim().replace(/\s+/g,' ');}
+function t2CheckAnswer(input,idx){const a=t2Norm(input),c=t2Norm(T2_RIDDLES[idx].ans);return a===c||a.includes(c);}
+
+function decryptBlob(blob,passphrase,onURL){
+  const parts=blob.split('.');
+  const salt=Uint8Array.from(atob(parts[1]),c=>c.charCodeAt(0));
+  const iv=Uint8Array.from(atob(parts[2]),c=>c.charCodeAt(0));
+  const ctRaw=Uint8Array.from(atob(parts[3]),c=>c.charCodeAt(0));
+  const data=ctRaw.slice(0,ctRaw.length-16),tag=ctRaw.slice(ctRaw.length-16);
+  const combined=new Uint8Array(data.length+tag.length);combined.set(data);combined.set(tag,data.length);
+  const enc=new TextEncoder();
+  return crypto.subtle.importKey('raw',enc.encode(passphrase),{name:'PBKDF2'},false,['deriveKey'])
+    .then(k=>crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:100000,hash:'SHA-256'},k,{name:'AES-GCM',length:256},false,['decrypt']))
+    .then(key=>crypto.subtle.decrypt({name:'AES-GCM',iv,tagLength:128},key,combined))
+    .then(buf=>onURL(new TextDecoder().decode(buf)));
+}
+function rabbitReveal(url,title,sub,linkLabel){
+  const msgs=document.getElementById('chat-msgs');
+  const div=document.createElement('div');div.className='cmsg ai';
+  const rainbow='background:linear-gradient(90deg,#ff0080,#ff8c00,#ffe000,#00ff80,#00bfff,#a855f7,#ff0080);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:cb-rainbow 3s linear infinite;';
+  const t=document.createElement('span');t.style.cssText='font-family:var(--cb-fd);font-size:7px;letter-spacing:3px;display:block;margin-bottom:8px;'+rainbow;t.textContent=title;
+  const s=document.createElement('span');s.style.cssText='color:rgba(216,221,208,.75);font-size:13px;';s.textContent=sub;
+  const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';
+  a.style.cssText='display:block;margin-top:10px;font-family:var(--cb-fd);font-size:11px;letter-spacing:3px;text-decoration:none;padding-top:8px;border-top:1px solid rgba(255,255,255,.1);'+rainbow;a.textContent=linkLabel;
+  div.appendChild(t);div.appendChild(s);div.appendChild(a);
+  msgs.appendChild(div);msgs.scrollTop=9999;
+}
+const QUEST_EXIT=['stop','quit','exit','cancel','nevermind','never mind','i resign','resign','give up','forget it','leave'];
+const T1_NUDGES=['Not quite — the answer is written on this page. Question: ','Close. Read the footer and try again: ','The page holds the answer. Try: '];
+function t1Check(low){
+  if(!t1Active)return null;
+  if(QUEST_EXIT.some(k=>low===k||low.startsWith(k))){t1Active=false;t1Answered={};setQuestBar(0);return {text:'Quest closed. Ask me about a war, or AVIDAA.',link:null};}
+  for(let i=0;i<T1_RIDDLES.length;i++){
+    if(t1Answered[i])continue;
+    const a=t2Norm(low),c=t2Norm(T1_RIDDLES[i].ans);
+    if(a===c||a.includes(c)){
+      t1Answered[i]=true;
+      const done=Object.keys(t1Answered).length;
+      if(done===T1_RIDDLES.length){
+        setQuestBar(2,{pct:100,color:'#ffd700',label:'ACCESS GRANTED'});
+        decryptBlob(T1_BLOB,'noise 2025',url=>rabbitReveal(url,'THE SIGNAL IS OPEN','You followed the page. The hole opens.','ENTER THE RABBIT HOLE ↓'))
+          .catch(()=>addMsg('The signal failed. Check your answers.','ai'));
+        return null;
+      }
+      const next=T1_RIDDLES.filter((_,j)=>!t1Answered[j])[0];
+      return {text:'Correct. '+done+'/'+T1_RIDDLES.length+' answered. Next: '+next.q+'\nHint: '+next.hint,link:null};
+    }
+  }
+  const un=T1_RIDDLES.filter((_,i)=>!t1Answered[i]);
+  if(un.length){const nu=T1_NUDGES[Math.floor(Math.random()*T1_NUDGES.length)];return {text:nu+un[0].q+'\nHint: '+un[0].hint+'\n(say "stop" to leave)',link:null};}
+  return null;
+}
+function t2Check(low){
+  if(!t2Active)return null;
+  if(QUEST_EXIT.some(k=>low===k||low.startsWith(k))){t2Active=false;t2Answered={};setQuestBar(0);return {text:'Closed. Ask me about a war, or AVIDAA.',link:null};}
+  for(let i=0;i<T2_RIDDLES.length;i++){
+    if(t2Answered[i])continue;
+    if(t2CheckAnswer(low,i)){
+      t2Answered[i]=true;
+      const done=Object.keys(t2Answered).length;
+      if(done===T2_RIDDLES.length){
+        setQuestBar(4,{pct:100,color:'#ff0080',label:'THE FLAME'});
+        decryptBlob(T2_BLOB,'2025 ai clear',url=>rabbitReveal(url,'THE FLAME BURNS DEEPER','You found the second layer. Not everyone looks this deep.','ENTER THE FLAME ↓'))
+          .catch(()=>addMsg('The frequency is wrong. Check your answers.','ai'));
+        return null;
+      }
+      const next=T2_RIDDLES.filter((_,j)=>!t2Answered[j])[0];
+      return {text:'Correct. '+done+'/3 answered. Next: '+next.q+'\nHint: '+next.hint,link:null};
+    }
+  }
+  const un=T2_RIDDLES.filter((_,i)=>!t2Answered[i]);
+  if(un.length){const nu=T1_NUDGES[Math.floor(Math.random()*T1_NUDGES.length)];return {text:nu+un[0].q+'\nHint: '+un[0].hint+'\n(say "stop" to leave)',link:null};}
+  return null;
+}
+function questCheck(low){
+  if(t2Active){const r=t2Check(low);if(r!==null)return r;return null;}
+  if(low.includes('the flame')||low.includes('theflame')||low.includes('go deeper')||low.includes('second layer')){
+    t2Active=true;setQuestBar(1,{pct:15,color:'#ff0080',label:'THE FLAME — TIER 2'});
+    const f=T2_RIDDLES[0];
+    return {text:'A deeper signal. Three riddles, any order.\n\nRiddle 1: '+f.q+'\nHint: '+f.hint,link:null};
+  }
+  if(t1Active){const r=t1Check(low);if(r!==null)return r;return null;}
+  if(['rabbit','hole','down the rabbit','signal down','secret','quest'].some(k=>low.includes(k))){
+    t1Active=true;setQuestBar(1);
+    const f=T1_RIDDLES[0];
+    return {text:'The hole is real — and the way in is on this page. Answer two and it opens.\n\nQuestion 1: '+f.q+'\nHint: '+f.hint,link:null};
+  }
+  return null;
+}
+
+/* ===== GENERATIVE LAYER ===== */
+const chatSession={asked:[],topics:[],lastTone:'neutral',turns:0};
+function lev(a,b){
+  if(Math.abs(a.length-b.length)>2)return 9;
+  const m=a.length,n=b.length,d=Array.from({length:m+1},(_,i)=>[i,...Array(n).fill(0)]);
+  for(let j=0;j<=n;j++)d[0][j]=j;
+  for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)
+    d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
+  return d[m][n];
+}
+function detectTone(msg){
+  const m=msg.toLowerCase();
+  if(/[!]{1,}|wow|amazing|cool|awesome|insane/.test(m))return'excited';
+  if(/\?$|how|why|what|explain|works|technical/.test(m))return'curious';
+  if(/really|prove|sure|doubt|fake|nonsense|why should/.test(m))return'skeptical';
+  if(/\b(hey|sup|yo|lol|gimme)\b/.test(m))return'casual';
+  return'neutral';
+}
+const TONE={
+  excited:{open:['Right? ','Now we\u2019re talking \u2014 '],close:[' \u2014 that toll shifted history.','']},
+  curious:{open:['Good question. ','So \u2014 '],close:[' Open the entry for full sourcing.','']},
+  skeptical:{open:['Fair. ','Straight answer: '],close:[' Check the sources listed on the entry yourself.','']},
+  casual:{open:['','Sure \u2014 '],close:['','']},
+  neutral:{open:[''],close:['']},
+};
+function flavor(text,tone){
+  const t=TONE[tone]||TONE.neutral;
+  const o=t.open[Math.floor(Math.random()*t.open.length)]||'';
+  const c=t.close[Math.floor(Math.random()*t.close.length)]||'';
+  return o+text+c;
+}
+function scoreEntry(e,low,words){
+  let sc=0;
+  e.k.forEach(k=>{
+    if(low===k||words.includes(k))sc+=10;
+    else if(low.includes(k)&&k.length>=4)sc+=k.split(' ').length*k.length*2;
+    else if(k.startsWith(low)||low.startsWith(k))sc+=Math.min(k.length,low.length)*1.2;
+    else words.forEach(w=>{
+      if(w.length>=3&&k.startsWith(w))sc+=w.length*0.9;
+      else if(w.length>=4&&k.includes(w))sc+=w.length*0.5;
+      else if(w.length>=6&&k.length>=6&&lev(w,k)<=1)sc+=w.length*0.6;
+    });
+  });
+  return sc;
+}
+function warsSpecialAnswer(key){
+  if(key==='__WARS_DEADLIEST__'){
+    const w=WARS.slice().sort((a,b)=>tollMax(b.toll)-tollMax(a.toll))[0];
+    return `${w.name} (${w.start}\u2013${w.end||'ongoing'}) holds the highest recorded toll in this archive. ${w.flag||'See sources on the entry.'}`;
+  }
+  if(key==='__WARS_COUNT__')return `This archive currently documents ${WARS.length} conflicts, from ancient Sumer through 2026 \u2014 expanding toward a fuller historical set.`;
+  return null;
+}
+function compose(hits,tone){
+  const top=hits[0].e, v=top.r;
+  if(v.length===1 && typeof v[0]==='string' && v[0].startsWith('__WARS_')){
+    return {text:warsSpecialAnswer(v[0]),link:null};
+  }
+  let i=Math.floor(Math.random()*v.length);
+  if(v.length>1&&chatLastResponse===v[i])i=(i+1)%v.length;
+  let body=v[i];
+  if(hits[1] && hits[1].sc>=hits[0].sc*0.6 && hits[1].e!==top && typeof hits[1].e.r[0]==='string' && !hits[1].e.r[0].startsWith('__')){
+    const v2=hits[1].e.r; body+=' '+v2[Math.floor(Math.random()*v2.length)];
+  }
+  chatLastResponse=v[i];
+  top._id=top._id||top.k[0];
+  chatSession.topics.push(top._id);
+  return {text:flavor(body,tone),link:top.link||null};
+}
+const SMALLTALK=[
+  {k:['who are you','what are you','are you ai','chatbot','what can you do'],r:['I run entirely in your browser, from the data on this page. No server, no tracking.']},
+  {k:['thanks','thank you','thx','ty'],r:['Anytime. Ask about any war, or AVIDAA itself.']},
+  {k:['bye','goodbye','see ya'],r:['The archive stays open. Come back anytime.']},
+  {k:['help','what should i ask','options'],r:['Ask about any war, its toll, its sources, or AVIDAA itself. Or whisper "rabbit".']},
+];
+const REDIRECTS=[
+  'I can help with wars in this archive, or AVIDAA itself. What would you like to know?',
+  'Try a war name, a country, a government, or a year. Or whisper "rabbit".',
+];
+const FRUSTRATION=['stop','shut up','stop talking','no','i said no','enough','quiet','leave me','annoying','useless','dumb'];
+const BACKOFF=['Fair enough \u2014 I\u2019ll stop pitching. Ask again whenever you\u2019re ready.','Understood. Standing by.'];
+function isFrustrated(low){return FRUSTRATION.some(k=>low===k||low.startsWith(k));}
+function smalltalkMatch(low,words){
+  let best=null,bs=0;
+  SMALLTALK.forEach(e=>{const s=scoreEntry(e,low,words);if(s>bs){bs=s;best=e;}});
+  if(best&&bs>=6)return best.r[0];
+  return null;
+}
+function chatMatch(msg){
+  const low=msg.toLowerCase().trim();
+  chatSession.turns++; chatSession.asked.push(low);
+  const tone=detectTone(msg); chatSession.lastTone=tone;
+  const quest=questCheck(low);
+  if(quest)return quest;
+  if(isFrustrated(low))return {text:BACKOFF[Math.floor(Math.random()*BACKOFF.length)],link:null};
+  const words=low.split(/\s+/).filter(w=>w.length>=2);
+  const st=smalltalkMatch(low,words);
+  if(st)return {text:st,link:null};
+  /* direct war-record search first */
+  const hits=WARS.filter(w=>matchesQuery(w,low)||[...(w.countries||[]),...(w.govs||[])].some(c=>low.includes(c.toLowerCase())));
+  if(hits.length && !/deadliest|most death|how many wars/.test(low)){
+    return {text:`Found ${hits.length} matching entr${hits.length===1?'y':'ies'}: ${hits.slice(0,5).map(w=>w.name).join(', ')}. Use the search bar above to open ${hits.length===1?'it':'them'}.`,link:null};
+  }
+  const ranked=KB.map(e=>({e,sc:scoreEntry(e,low,words)})).filter(x=>x.sc>0).sort((a,b)=>b.sc-a.sc);
+  if(ranked.length && ranked[0].sc>=6)return compose(ranked,tone);
+  return {text:REDIRECTS[Math.floor(Math.random()*REDIRECTS.length)],link:null};
+}
+function addMsg(text,cls,link){
+  const div=document.createElement('div');div.className='cmsg '+cls;div.textContent=text;
+  if(link){
+    const a=document.createElement('a');a.href=link;a.target='_blank';a.rel='noopener';
+    a.style.cssText='display:block;margin-top:7px;font-size:10px;letter-spacing:2px;color:rgba(201,162,75,.6);text-decoration:none;border-top:1px solid rgba(201,162,75,.1);padding-top:6px;';
+    a.textContent='OPEN ↗';div.appendChild(a);
+  }
+  const m=document.getElementById('chat-msgs');m.appendChild(div);m.scrollTop=9999;
+}
+function showTyping(){
+  const t=document.createElement('div');t.className='typing-indicator';t.id='typing';
+  t.innerHTML='<span></span><span></span><span></span>';
+  const m=document.getElementById('chat-msgs');m.appendChild(t);m.scrollTop=9999;return t;
+}
+let chatOpen=false;
+function toggleChat(){
+  chatOpen=!chatOpen;
+  document.getElementById('chat-box').classList.toggle('open',chatOpen);
+  if(chatOpen&&document.getElementById('chat-msgs').children.length===0){
+    setTimeout(()=>addMsg('AVIDAA WARS archive online — ask about any conflict, its toll, or AVIDAA itself.','ai'),300);
+  }
+  if(chatOpen)document.getElementById('chat-input').focus();
+}
+function chatSend(){
+  const inp=document.getElementById('chat-input');const msg=inp.value.trim();if(!msg)return;
+  addMsg(msg,'user');inp.value='';
+  const typing=showTyping();
+  setTimeout(()=>{
+    typing.remove();
+    const res=chatMatch(msg);
+    addMsg(res.text,'ai',res.link);
+  },300+Math.random()*300);
+}
+document.getElementById('chat-input').addEventListener('keydown',e=>{if(e.key==='Enter')chatSend();});
+function quickAsk(q){document.getElementById('chat-input').value=q;chatSend();}
+
+/* ===== PULSE RING ===== */
+(function(){
+  const pc=document.getElementById('pulse-ring');if(!pc)return;
+  const px=pc.getContext('2d');let pt=0;
+  function draw(){
+    px.clearRect(0,0,58,58);const cx=29,cy=29,beat=(pt%1);let scale;
+    if(beat<.08)scale=1+beat*8;else if(beat<.16)scale=1.64-(beat-.08)*8;else if(beat<.22)scale=1+(beat-.16)*5;else if(beat<.28)scale=1.3-(beat-.22)*5;else scale=1;
+    const r=24*scale,g=px.createRadialGradient(cx,cy,r*.5,cx,cy,r);
+    g.addColorStop(0,'rgba(168,50,50,0)');g.addColorStop(.7,`rgba(201,162,75,${(.15+(scale-1)*.4).toFixed(3)})`);g.addColorStop(1,'rgba(201,162,75,0)');
+    px.fillStyle=g;px.beginPath();px.arc(cx,cy,r,0,Math.PI*2);px.fill();
+    pt+=.008;if(window.pageVisible)requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+
+</body>
+</html>
