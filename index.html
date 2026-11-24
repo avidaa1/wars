@@ -818,7 +818,7 @@ window.pageVisible = window.pageVisible===undefined ? true : window.pageVisible;
 document.addEventListener('visibilitychange',()=>{window.pageVisible=!document.hidden;});
 let chatLastResponse='';
 
-/* KB — WARS-specific entries first, then the standard AVIDAA-pages KB.  excluded. */
+/* KB — WARS-specific entries first, then the standard AVIDAA-pages KB. */
 const KB=[
   {k:['deadliest','most death','worst war','biggest war','highest toll'],r:['__WARS_DEADLIEST__']},
   {k:['how many wars','total wars','wars documented','how big is this','coverage'],r:['__WARS_COUNT__']},
