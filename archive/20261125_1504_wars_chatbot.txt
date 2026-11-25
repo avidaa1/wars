@@ -1,0 +1,6 @@
+Archived (removed from the live page) by the chatbot audit 20261125_1504.
+Original file: index.html
+
+/* ===== replaced: quickAsk ===== */
+function quickAsk(q){document.getElementById('chat-input').value=q;chatSend();}
+

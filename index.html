@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#050818">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AVIDAA WARS — The Archive of Conflict</title>
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; connect-src https://api.anthropic.com;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; connect-src;">
 <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -101,46 +101,18 @@ main{max-width:900px;margin:0 auto;padding:26px clamp(10px,3vw,20px) 80px;positi
 footer{text-align:center;padding:30px;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:1px}
 
 /* ===== CANONICAL AVIDAA CHATBOT MODULE — war-room themed ===== */
-#chatbot{--cb-cyan:#c9a24b;--cb-purple:#a83232;--cb-green:#4a7a4a;--cb-fb:'Oswald',sans-serif;--cb-fd:'JetBrains Mono',monospace;}
-#chatbot{position:fixed;bottom:48px;right:18px;z-index:9000;width:min(360px,calc(100vw - 24px));font-family:var(--cb-fb);}
-#chat-toggle{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--cb-purple),var(--cb-cyan));border:2px solid rgba(255,255,255,.1);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 24px rgba(168,85,247,.3),0 0 48px rgba(0,229,255,.1);margin-left:auto;-webkit-appearance:none;appearance:none;transition:transform .2s;animation:cb-chatpulse 3s ease-in-out infinite;color:#000}
-#chat-toggle:hover{transform:scale(1.08)}
 @keyframes cb-chatpulse{0%,100%{box-shadow:0 0 24px rgba(168,50,50,.35),0 0 48px rgba(201,162,75,.15)}50%{box-shadow:0 0 34px rgba(168,50,50,.55),0 0 64px rgba(201,162,75,.3)}}
 @keyframes cb-rainbow{to{background-position:200% center}}
 @keyframes cb-livepulse{0%,100%{opacity:1}50%{opacity:.35}}
-#chat-box{background:rgba(10,14,10,.97);border:1px solid var(--line);backdrop-filter:blur(14px);display:none;flex-direction:column;margin-bottom:10px;overflow:hidden;border-radius:4px;box-shadow:0 0 40px rgba(0,0,0,.8)}
-#chat-box.open{display:flex}
 #quest-bar{height:3px;background:rgba(201,162,75,.08);position:relative;overflow:hidden;transition:opacity .3s;opacity:0}
 #quest-bar.active{opacity:1}
 #quest-fill{height:100%;width:0%;transition:width .8s ease,background .8s ease;background:var(--cb-cyan)}
 #quest-label{font-family:var(--cb-fd);font-size:7px;letter-spacing:3px;color:rgba(201,162,75,.35);padding:4px 16px 0;display:none}
 #quest-label.active{display:block}
-#chat-head{padding:12px 16px;border-bottom:1px solid rgba(201,162,75,.15);display:flex;justify-content:space-between;align-items:center;background:rgba(201,162,75,.04)}
 .ch-title{font-family:var(--cb-fd);font-size:9px;letter-spacing:4px;color:var(--cb-cyan)}
 .ch-status{font-size:8px;letter-spacing:2px;color:var(--cb-green);display:flex;align-items:center;gap:5px}
-.ch-dot{width:5px;height:5px;border-radius:50%;background:var(--cb-green);animation:cb-livepulse 1.5s ease-in-out infinite}
 .ch-close{color:rgba(255,255,255,.3);cursor:pointer;font-size:16px;line-height:1;padding:0 2px}
-#chat-msgs{height:240px;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin}
-.cmsg{font-size:12.5px;letter-spacing:.3px;line-height:1.55;padding:9px 13px;max-width:88%;white-space:pre-wrap}
-.cmsg.ai{background:rgba(201,162,75,.06);border-left:2px solid var(--cb-cyan);color:var(--text);align-self:flex-start;border-radius:0 4px 4px 0}
-.cmsg.ai::before{content:'AVIDAA WARS';font-family:var(--cb-fd);font-size:6px;letter-spacing:2px;color:rgba(201,162,75,.5);display:block;margin-bottom:4px}
-.cmsg.user{background:rgba(168,50,50,.1);border-right:2px solid var(--cb-purple);color:var(--text);align-self:flex-end;text-align:right;border-radius:4px 0 0 4px}
-.typing-indicator{display:flex;gap:4px;padding:10px 14px;align-self:flex-start}
-.typing-indicator span{width:5px;height:5px;background:var(--cb-cyan);border-radius:50%;opacity:.4;animation:cb-typedot .8s ease-in-out infinite}
-.typing-indicator span:nth-child(2){animation-delay:.15s}
-.typing-indicator span:nth-child(3){animation-delay:.3s}
 @keyframes cb-typedot{0%,100%{opacity:.2;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}
-#chat-suggestions{display:flex;flex-wrap:wrap;gap:5px;padding:8px 14px;border-top:1px solid rgba(201,162,75,.08)}
-.chat-sugg{font-size:10px;letter-spacing:.5px;padding:3px 10px;border:1px solid rgba(201,162,75,.2);color:rgba(201,162,75,.7);cursor:pointer;background:rgba(201,162,75,.04);transition:all .2s}
-.chat-sugg:hover{border-color:var(--cb-cyan);color:var(--cb-cyan)}
-#chat-input-row{display:flex;border-top:1px solid rgba(201,162,75,.1)}
-#chat-input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:var(--cb-fb);font-size:13px;padding:11px 14px;-webkit-appearance:none;appearance:none}
-#chat-input::placeholder{color:rgba(216,221,208,.25)}
-#chat-send{background:transparent;border:none;border-left:1px solid rgba(201,162,75,.1);color:var(--cb-cyan);padding:0 16px;cursor:pointer;font-size:15px;-webkit-appearance:none;appearance:none}
-#rabbit-avatar{display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 0 6px rgba(201,162,75,.4))}
-#pulse-ring{position:absolute;bottom:-6px;right:-6px;width:58px;height:58px;border-radius:50%;pointer-events:none;z-index:-1}
-@media (max-width:600px){#chatbot{bottom:14px;right:10px}#chat-msgs{height:50vh}}
-@media (prefers-reduced-motion:reduce){#chat-toggle{animation:none}.ch-dot{animation:none}}
 
 @media (max-width:600px){
   .searchwrap{top:92px}
@@ -263,46 +235,6 @@ footer{text-align:center;padding:30px;color:var(--muted);font-family:'JetBrains 
 
 <footer>AVIDAA * IO — WARS ARCHIVE — a signal beneath the noise of history. Est. 2025, built for humans and AI, knowledge made clear. Phase 1: 68 conflicts documented, expanding toward full historical coverage.</footer>
 
-<div id="chatbot">
-  <div id="chat-box">
-    <div id="chat-head">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div id="rabbit-avatar">
-          <svg id="rabbit-svg" width="34" height="34" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
-            <ellipse id="ear-l" cx="13" cy="10" rx="3.5" ry="7" fill="#0a0e0a" stroke="#c9a24b" stroke-width="1"/>
-            <ellipse id="ear-r" cx="25" cy="10" rx="3.5" ry="7" fill="#0a0e0a" stroke="#c9a24b" stroke-width="1"/>
-            <ellipse id="rabbit-head" cx="19" cy="22" rx="10" ry="9" fill="#0a0e0a" stroke="#c9a24b" stroke-width="1"/>
-            <circle id="eye-l" cx="15" cy="21" r="2" fill="#c9a24b" opacity="0.9"/>
-            <circle id="eye-r" cx="23" cy="21" r="2" fill="#c9a24b" opacity="0.9"/>
-            <ellipse id="nose" cx="19" cy="25" rx="1.2" ry="0.8" fill="#a83232" opacity="0.8"/>
-            <circle id="glow-ring" cx="19" cy="22" r="12" fill="none" stroke="#c9a24b" stroke-width="0.4" opacity="0.2"/>
-          </svg>
-        </div>
-        <div class="ch-title">AVIDAA WARS</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div class="ch-status"><div class="ch-dot"></div>ONLINE</div>
-        <div class="ch-close" onclick="toggleChat()">&#x2715;</div>
-      </div>
-    </div>
-    <div id="quest-bar"><div id="quest-fill"></div></div>
-    <div id="quest-label"></div>
-    <div id="chat-msgs"></div>
-    <div id="chat-suggestions">
-      <div class="chat-sugg" onclick="quickAsk('deadliest war')">Deadliest war</div>
-      <div class="chat-sugg" onclick="quickAsk('what is avidaa')">What is AVIDAA?</div>
-      <div class="chat-sugg" onclick="quickAsk('rabbit')">?</div>
-    </div>
-    <div id="chat-input-row">
-      <input id="chat-input" placeholder="Ask about a war, or AVIDAA..." maxlength="200">
-      <button id="chat-send" onclick="chatSend()">&#x27A4;</button>
-    </div>
-  </div>
-  <button id="chat-toggle" onclick="toggleChat()" style="position:relative;">
-    <canvas id="pulse-ring" width="58" height="58"></canvas>
-    &#x2694;
-  </button>
-</div>
 
 
 <script>
@@ -879,291 +811,6 @@ render();
 })();
 
 
-/* ===== CANONICAL AVIDAA CHATBOT MODULE (WARS-adapted) ===== */
-window.pageVisible = window.pageVisible===undefined ? true : window.pageVisible;
-document.addEventListener('visibilitychange',()=>{window.pageVisible=!document.hidden;});
-let chatLastResponse='';
-
-/* KB — WARS-specific entries first, then the standard AVIDAA-pages KB. */
-const KB=[
-  {k:['deadliest','most death','worst war','biggest war','highest toll'],r:['__WARS_DEADLIEST__']},
-  {k:['how many wars','total wars','wars documented','how big is this','coverage'],r:['__WARS_COUNT__']},
-  {k:['official','disputed','estimated','why three numbers','toll method','methodology','sourcing'],r:['This archive never merges figures into one convenient number. OFFICIAL is a government-issued count, DISPUTED is a contested/alternate figure, ESTIMATED is an independent researcher range. Where a state account and independent historians disagree, the entry says so.','The three-tier toll system exists because history gets revised, concealed, or politicized. Showing all sides preserves the disagreement itself as data.']},
-  {k:['what is avidaa wars','wars archive','this page','wars page'],r:['AVIDAA WARS is a standing archive of documented conflicts from ancient Sumer through 2026, built so casualty figures cannot be quietly revised or forgotten. Every entry separates official, disputed, and estimated tolls, and flags entries where governments or historians disagree.']},
-  {k:['what is avidaa','avidaa brand','about avidaa','avidaa platform','avidaa ecosystem'],r:['AVIDAA is a digital brand and platform ecosystem. Not an app — a declaration. Knowledge belongs to everyone. Est. 2025 by IO, built for humans and AI, knowledge made clear.','AVIDAA began in 2025 — books, music, AI, code, then a full platform. Signal beneath the noise.']},
-  {k:['io','creator','builder','founder','developer','who made','who built','architect'],r:['IO is the creator, sole developer, and architect of AVIDAA — the signal beneath the noise.'],link:'https://avidaa1.github.io/io'},
-  {k:['hub','main','platform','pages','knowledge','website'],r:['AVIDAA HUB — the core platform, dozens of pages in one file.'],link:'https://avidaa1.github.io/hub'},
-  {k:['stoa','stoic','stoicism','marcus','aurelius'],r:['AVIDAA STOA — the full Stoic archive, sourced quotes, and the MARCUS AI advisor.'],link:'https://avidaa1.github.io/stoa'},
-  {k:['ai archive','ai page','artificial intelligence'],r:['AI ARCHIVE — a living encyclopedia of AI from the 1940s to now.'],link:'https://avidaa1.github.io/ai'},
-  {k:['global','power','network','elite','federal reserve','blackrock'],r:['AVIDAA GLOBAL — a documented map of global power, sourced from court filings and FOIA.'],link:'https://avidaa1.github.io/global'},
-  {k:['origins','civilization','ancient','sumer','egypt','mesopotamia'],r:['AVIDAA ORIGINS — the full ancient civilization timeline, 5,500+ years.'],link:'https://avidaa1.github.io/origins'},
-  {k:['terra','nature','earth','animals','extinction'],r:['AVIDAA TERRA — a living nature library, from first cells to the sixth extinction.'],link:'https://avidaa1.github.io/terra'},
-  {k:['bitcoin','btc','crypto','blockchain'],r:['AVIDAA BITCOIN — on-chain metrics, halvings, macro and geopolitics.'],link:'https://avidaa1.github.io/bitcoin'},
-  {k:['downloads','download','tools','rabbit hole','secret page'],r:['AVIDAA keeps its tools tucked away — some you find, some you earn. Whisper "rabbit" if you like a challenge.']},
-  {k:['rabbit','hole','down the rabbit','signal down','secret','quest'],r:['__QUEST_1__']},
-  {k:['where does he live','where is io','what country','location','nationality','real name'],r:['AVIDAA is a global signal — no country, no coordinates. IO is the work, not a location.']},
-  {k:['hello','hi','hey','sup','yo','begin'],r:['Signal received. Ask me about a war in this archive, or about AVIDAA itself.','AVIDAA WARS online. What do you want to know?']},
-  {k:['thanks','thank','good','nice','cool'],r:['That is what this archive is built for.','Anytime — the record stays open.']},
-  {k:['who are you','what are you','are you ai','chatbot','what can you do'],r:['I run entirely in your browser, from the data baked into this page. No server, no tracking. Ask me about any war, or about AVIDAA.']},
-];
-
-/* ===== TIER 1 — RABBIT QUEST ===== */
-let t1Active=false, t1Answered={};
-const T1_BLOB='mo+y9kT7yvUzdvJfRGq3L4es7g==.cyDBGT0ieWN0pNBew/O3xw==.u593qaVgoL26XKk3.OYFx/BgQJgWz1lFHTncG5LdbYzGXkrOUx5a87jme0xDZP2tzDRY1Bm5BgTzXcwvj.sLyHBeNKDrs1rxHblG+JHx5lkkM3y4U=';
-const T1_RIDDLES=[
-  {q:"AVIDAA is the signal beneath the ____",ans:"noise",hint:"It's the page's core line — signal beneath the ____"},
-  {q:"AVIDAA was founded in the year ____",ans:"2025",hint:"Check the footer — Est. 2025"},
-];
-function setQuestBar(stage,override){
-  const bar=document.getElementById('quest-bar'),fill=document.getElementById('quest-fill'),lbl=document.getElementById('quest-label');
-  if(!bar||!fill||!lbl)return;
-  if(stage===0){bar.classList.remove('active');lbl.classList.remove('active');return;}
-  const q=override||{pct:25,color:'#c9a24b',label:'SIGNAL'};
-  bar.classList.add('active');lbl.classList.add('active');
-  fill.style.width=q.pct+'%';fill.style.background=q.color;fill.style.boxShadow='0 0 8px '+q.color;
-  lbl.textContent=q.label;lbl.style.color=q.color;
-}
-
-/* ===== TIER 2 — THE FLAME ===== */
-const T2_BLOB='V9dFikRt8D4C4iKAp2lEuct8wsQ=.516IOB2ZHLesUzHC5jw4qw==.kk9MQpaRWhB5uuc0.VLJKsWe4AmWqHQACcdCJmfOE1Hsx0Gq7AqD6W5qLQlBVD4gaeZEAjIGxjfxM4g27odkF5b7prrRTKg==.VTUUOv/2Ts/v/koDb7hiq4TAPiWUFGUp';
-const T2_RIDDLES=[
-  {q:"AVIDAA signal first lit in the year ____",ans:"2025",hint:"Check the footer — Est. 2025"},
-  {q:"AVIDAA is built for two kinds of mind: humans and ____",ans:"ai",hint:"Read the footer tagline"},
-  {q:"IO vision: knowledge made ____",ans:"clear",hint:"Signal over noise — knowledge made ____"},
-];
-let t2Answered={},t2Active=false;
-function t2Norm(s){return s.toLowerCase().trim().replace(/\s+/g,' ');}
-function t2CheckAnswer(input,idx){const a=t2Norm(input),c=t2Norm(T2_RIDDLES[idx].ans);return a===c||a.includes(c);}
-
-function decryptBlob(blob,passphrase,onURL){
-  const parts=blob.split('.');
-  const salt=Uint8Array.from(atob(parts[1]),c=>c.charCodeAt(0));
-  const iv=Uint8Array.from(atob(parts[2]),c=>c.charCodeAt(0));
-  const ctRaw=Uint8Array.from(atob(parts[3]),c=>c.charCodeAt(0));
-  const data=ctRaw.slice(0,ctRaw.length-16),tag=ctRaw.slice(ctRaw.length-16);
-  const combined=new Uint8Array(data.length+tag.length);combined.set(data);combined.set(tag,data.length);
-  const enc=new TextEncoder();
-  return crypto.subtle.importKey('raw',enc.encode(passphrase),{name:'PBKDF2'},false,['deriveKey'])
-    .then(k=>crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:100000,hash:'SHA-256'},k,{name:'AES-GCM',length:256},false,['decrypt']))
-    .then(key=>crypto.subtle.decrypt({name:'AES-GCM',iv,tagLength:128},key,combined))
-    .then(buf=>onURL(new TextDecoder().decode(buf)));
-}
-function rabbitReveal(url,title,sub,linkLabel){
-  const msgs=document.getElementById('chat-msgs');
-  const div=document.createElement('div');div.className='cmsg ai';
-  const rainbow='background:linear-gradient(90deg,#ff0080,#ff8c00,#ffe000,#00ff80,#00bfff,#a855f7,#ff0080);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:cb-rainbow 3s linear infinite;';
-  const t=document.createElement('span');t.style.cssText='font-family:var(--cb-fd);font-size:7px;letter-spacing:3px;display:block;margin-bottom:8px;'+rainbow;t.textContent=title;
-  const s=document.createElement('span');s.style.cssText='color:rgba(216,221,208,.75);font-size:13px;';s.textContent=sub;
-  const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';
-  a.style.cssText='display:block;margin-top:10px;font-family:var(--cb-fd);font-size:11px;letter-spacing:3px;text-decoration:none;padding-top:8px;border-top:1px solid rgba(255,255,255,.1);'+rainbow;a.textContent=linkLabel;
-  div.appendChild(t);div.appendChild(s);div.appendChild(a);
-  msgs.appendChild(div);msgs.scrollTop=9999;
-}
-const QUEST_EXIT=['stop','quit','exit','cancel','nevermind','never mind','i resign','resign','give up','forget it','leave'];
-const T1_NUDGES=['Not quite — the answer is written on this page. Question: ','Close. Read the footer and try again: ','The page holds the answer. Try: '];
-function t1Check(low){
-  if(!t1Active)return null;
-  if(QUEST_EXIT.some(k=>low===k||low.startsWith(k))){t1Active=false;t1Answered={};setQuestBar(0);return {text:'Quest closed. Ask me about a war, or AVIDAA.',link:null};}
-  for(let i=0;i<T1_RIDDLES.length;i++){
-    if(t1Answered[i])continue;
-    const a=t2Norm(low),c=t2Norm(T1_RIDDLES[i].ans);
-    if(a===c||a.includes(c)){
-      t1Answered[i]=true;
-      const done=Object.keys(t1Answered).length;
-      if(done===T1_RIDDLES.length){
-        setQuestBar(2,{pct:100,color:'#ffd700',label:'ACCESS GRANTED'});
-        decryptBlob(T1_BLOB,'noise 2025',url=>rabbitReveal(url,'THE SIGNAL IS OPEN','You followed the page. The hole opens.','ENTER THE RABBIT HOLE ↓'))
-          .catch(()=>addMsg('The signal failed. Check your answers.','ai'));
-        return null;
-      }
-      const next=T1_RIDDLES.filter((_,j)=>!t1Answered[j])[0];
-      return {text:'Correct. '+done+'/'+T1_RIDDLES.length+' answered. Next: '+next.q+'\nHint: '+next.hint,link:null};
-    }
-  }
-  const un=T1_RIDDLES.filter((_,i)=>!t1Answered[i]);
-  if(un.length){const nu=T1_NUDGES[Math.floor(Math.random()*T1_NUDGES.length)];return {text:nu+un[0].q+'\nHint: '+un[0].hint+'\n(say "stop" to leave)',link:null};}
-  return null;
-}
-function t2Check(low){
-  if(!t2Active)return null;
-  if(QUEST_EXIT.some(k=>low===k||low.startsWith(k))){t2Active=false;t2Answered={};setQuestBar(0);return {text:'Closed. Ask me about a war, or AVIDAA.',link:null};}
-  for(let i=0;i<T2_RIDDLES.length;i++){
-    if(t2Answered[i])continue;
-    if(t2CheckAnswer(low,i)){
-      t2Answered[i]=true;
-      const done=Object.keys(t2Answered).length;
-      if(done===T2_RIDDLES.length){
-        setQuestBar(4,{pct:100,color:'#ff0080',label:'THE FLAME'});
-        decryptBlob(T2_BLOB,'2025 ai clear',url=>rabbitReveal(url,'THE FLAME BURNS DEEPER','You found the second layer. Not everyone looks this deep.','ENTER THE FLAME ↓'))
-          .catch(()=>addMsg('The frequency is wrong. Check your answers.','ai'));
-        return null;
-      }
-      const next=T2_RIDDLES.filter((_,j)=>!t2Answered[j])[0];
-      return {text:'Correct. '+done+'/3 answered. Next: '+next.q+'\nHint: '+next.hint,link:null};
-    }
-  }
-  const un=T2_RIDDLES.filter((_,i)=>!t2Answered[i]);
-  if(un.length){const nu=T1_NUDGES[Math.floor(Math.random()*T1_NUDGES.length)];return {text:nu+un[0].q+'\nHint: '+un[0].hint+'\n(say "stop" to leave)',link:null};}
-  return null;
-}
-function questCheck(low){
-  if(t2Active){const r=t2Check(low);if(r!==null)return r;return null;}
-  if(low.includes('the flame')||low.includes('theflame')||low.includes('go deeper')||low.includes('second layer')){
-    t2Active=true;setQuestBar(1,{pct:15,color:'#ff0080',label:'THE FLAME — TIER 2'});
-    const f=T2_RIDDLES[0];
-    return {text:'A deeper signal. Three riddles, any order.\n\nRiddle 1: '+f.q+'\nHint: '+f.hint,link:null};
-  }
-  if(t1Active){const r=t1Check(low);if(r!==null)return r;return null;}
-  if(['rabbit','hole','down the rabbit','signal down','secret','quest'].some(k=>low.includes(k))){
-    t1Active=true;setQuestBar(1);
-    const f=T1_RIDDLES[0];
-    return {text:'The hole is real — and the way in is on this page. Answer two and it opens.\n\nQuestion 1: '+f.q+'\nHint: '+f.hint,link:null};
-  }
-  return null;
-}
-
-/* ===== GENERATIVE LAYER ===== */
-const chatSession={asked:[],topics:[],lastTone:'neutral',turns:0};
-function lev(a,b){
-  if(Math.abs(a.length-b.length)>2)return 9;
-  const m=a.length,n=b.length,d=Array.from({length:m+1},(_,i)=>[i,...Array(n).fill(0)]);
-  for(let j=0;j<=n;j++)d[0][j]=j;
-  for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)
-    d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
-  return d[m][n];
-}
-function detectTone(msg){
-  const m=msg.toLowerCase();
-  if(/[!]{1,}|wow|amazing|cool|awesome|insane/.test(m))return'excited';
-  if(/\?$|how|why|what|explain|works|technical/.test(m))return'curious';
-  if(/really|prove|sure|doubt|fake|nonsense|why should/.test(m))return'skeptical';
-  if(/\b(hey|sup|yo|lol|gimme)\b/.test(m))return'casual';
-  return'neutral';
-}
-const TONE={
-  excited:{open:['Right? ','Now we\u2019re talking \u2014 '],close:[' \u2014 that toll shifted history.','']},
-  curious:{open:['Good question. ','So \u2014 '],close:[' Open the entry for full sourcing.','']},
-  skeptical:{open:['Fair. ','Straight answer: '],close:[' Check the sources listed on the entry yourself.','']},
-  casual:{open:['','Sure \u2014 '],close:['','']},
-  neutral:{open:[''],close:['']},
-};
-function flavor(text,tone){
-  const t=TONE[tone]||TONE.neutral;
-  const o=t.open[Math.floor(Math.random()*t.open.length)]||'';
-  const c=t.close[Math.floor(Math.random()*t.close.length)]||'';
-  return o+text+c;
-}
-function scoreEntry(e,low,words){
-  let sc=0;
-  e.k.forEach(k=>{
-    if(low===k||words.includes(k))sc+=10;
-    else if(low.includes(k)&&k.length>=4)sc+=k.split(' ').length*k.length*2;
-    else if(k.startsWith(low)||low.startsWith(k))sc+=Math.min(k.length,low.length)*1.2;
-    else words.forEach(w=>{
-      if(w.length>=3&&k.startsWith(w))sc+=w.length*0.9;
-      else if(w.length>=4&&k.includes(w))sc+=w.length*0.5;
-      else if(w.length>=6&&k.length>=6&&lev(w,k)<=1)sc+=w.length*0.6;
-    });
-  });
-  return sc;
-}
-function warsSpecialAnswer(key){
-  if(key==='__WARS_DEADLIEST__'){
-    const w=WARS.slice().sort((a,b)=>tollMax(b.toll)-tollMax(a.toll))[0];
-    return `${w.name} (${w.start}\u2013${w.end||'ongoing'}) holds the highest recorded toll in this archive. ${w.flag||'See sources on the entry.'}`;
-  }
-  if(key==='__WARS_COUNT__')return `This archive currently documents ${WARS.length} conflicts, from ancient Sumer through 2026 \u2014 expanding toward a fuller historical set.`;
-  return null;
-}
-function compose(hits,tone){
-  const top=hits[0].e, v=top.r;
-  if(v.length===1 && typeof v[0]==='string' && v[0].startsWith('__WARS_')){
-    return {text:warsSpecialAnswer(v[0]),link:null};
-  }
-  let i=Math.floor(Math.random()*v.length);
-  if(v.length>1&&chatLastResponse===v[i])i=(i+1)%v.length;
-  let body=v[i];
-  if(hits[1] && hits[1].sc>=hits[0].sc*0.6 && hits[1].e!==top && typeof hits[1].e.r[0]==='string' && !hits[1].e.r[0].startsWith('__')){
-    const v2=hits[1].e.r; body+=' '+v2[Math.floor(Math.random()*v2.length)];
-  }
-  chatLastResponse=v[i];
-  top._id=top._id||top.k[0];
-  chatSession.topics.push(top._id);
-  return {text:flavor(body,tone),link:top.link||null};
-}
-const SMALLTALK=[
-  {k:['who are you','what are you','are you ai','chatbot','what can you do'],r:['I run entirely in your browser, from the data on this page. No server, no tracking.']},
-  {k:['thanks','thank you','thx','ty'],r:['Anytime. Ask about any war, or AVIDAA itself.']},
-  {k:['bye','goodbye','see ya'],r:['The archive stays open. Come back anytime.']},
-  {k:['help','what should i ask','options'],r:['Ask about any war, its toll, its sources, or AVIDAA itself. Or whisper "rabbit".']},
-];
-const REDIRECTS=[
-  'I can help with wars in this archive, or AVIDAA itself. What would you like to know?',
-  'Try a war name, a country, a government, or a year. Or whisper "rabbit".',
-];
-const FRUSTRATION=['stop','shut up','stop talking','no','i said no','enough','quiet','leave me','annoying','useless','dumb'];
-const BACKOFF=['Fair enough \u2014 I\u2019ll stop pitching. Ask again whenever you\u2019re ready.','Understood. Standing by.'];
-function isFrustrated(low){return FRUSTRATION.some(k=>low===k||low.startsWith(k));}
-function smalltalkMatch(low,words){
-  let best=null,bs=0;
-  SMALLTALK.forEach(e=>{const s=scoreEntry(e,low,words);if(s>bs){bs=s;best=e;}});
-  if(best&&bs>=6)return best.r[0];
-  return null;
-}
-function chatMatch(msg){
-  const low=msg.toLowerCase().trim();
-  chatSession.turns++; chatSession.asked.push(low);
-  const tone=detectTone(msg); chatSession.lastTone=tone;
-  const quest=questCheck(low);
-  if(quest)return quest;
-  if(isFrustrated(low))return {text:BACKOFF[Math.floor(Math.random()*BACKOFF.length)],link:null};
-  const words=low.split(/\s+/).filter(w=>w.length>=2);
-  const st=smalltalkMatch(low,words);
-  if(st)return {text:st,link:null};
-  /* direct war-record search first */
-  const hits=WARS.filter(w=>matchesQuery(w,low)||[...(w.countries||[]),...(w.govs||[])].some(c=>low.includes(c.toLowerCase())));
-  if(hits.length && !/deadliest|most death|how many wars/.test(low)){
-    return {text:`Found ${hits.length} matching entr${hits.length===1?'y':'ies'}: ${hits.slice(0,5).map(w=>w.name).join(', ')}. Use the search bar above to open ${hits.length===1?'it':'them'}.`,link:null};
-  }
-  const ranked=KB.map(e=>({e,sc:scoreEntry(e,low,words)})).filter(x=>x.sc>0).sort((a,b)=>b.sc-a.sc);
-  if(ranked.length && ranked[0].sc>=6)return compose(ranked,tone);
-  return {text:REDIRECTS[Math.floor(Math.random()*REDIRECTS.length)],link:null};
-}
-function addMsg(text,cls,link){
-  const div=document.createElement('div');div.className='cmsg '+cls;div.textContent=text;
-  if(link){
-    const a=document.createElement('a');a.href=link;a.target='_blank';a.rel='noopener';
-    a.style.cssText='display:block;margin-top:7px;font-size:10px;letter-spacing:2px;color:rgba(201,162,75,.6);text-decoration:none;border-top:1px solid rgba(201,162,75,.1);padding-top:6px;';
-    a.textContent='OPEN ↗';div.appendChild(a);
-  }
-  const m=document.getElementById('chat-msgs');m.appendChild(div);m.scrollTop=9999;
-}
-function showTyping(){
-  const t=document.createElement('div');t.className='typing-indicator';t.id='typing';
-  t.innerHTML='<span></span><span></span><span></span>';
-  const m=document.getElementById('chat-msgs');m.appendChild(t);m.scrollTop=9999;return t;
-}
-let chatOpen=false;
-function toggleChat(){
-  chatOpen=!chatOpen;
-  document.getElementById('chat-box').classList.toggle('open',chatOpen);
-  if(chatOpen&&document.getElementById('chat-msgs').children.length===0){
-    setTimeout(()=>addMsg('AVIDAA WARS archive online — ask about any conflict, its toll, or AVIDAA itself.','ai'),300);
-  }
-  if(chatOpen)document.getElementById('chat-input').focus();
-}
-function chatSend(){
-  const inp=document.getElementById('chat-input');const msg=inp.value.trim();if(!msg)return;
-  addMsg(msg,'user');inp.value='';
-  const typing=showTyping();
-  setTimeout(()=>{
-    typing.remove();
-    const res=chatMatch(msg);
-    addMsg(res.text,'ai',res.link);
-  },300+Math.random()*300);
-}
-document.getElementById('chat-input').addEventListener('keydown',e=>{if(e.key==='Enter')chatSend();});
-function quickAsk(q){document.getElementById('chat-input').value=q;chatSend();}
 
 /* ===== PULSE RING ===== */
 (function(){
@@ -1201,7 +848,7 @@ if(document.readyState==='complete')start();else addEventListener('load',start);
 addEventListener('resize',sched);})();</script><script id="av-shell-20261124">/* AVIDAA shell: shared header (or floating pill) + footer with the "Last updated" stamp. No outside calls, no tracking.
    Template tokens are replaced when a page is built: Wars --av-knowledge Knowledge 2026-11-24 06:37 */
 (function(){
-  var NAME='Wars',SECTOR='--av-knowledge',STAMP='2026-11-25 14:45',HOME='https://avidaa1.github.io/';
+  var NAME='Wars',SECTOR='--av-knowledge',STAMP='2026-11-25 15:20',HOME='https://avidaa1.github.io/';
   var ARROW='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   function build(){
     if(!document.body||document.querySelector('.av-footer'))return;
